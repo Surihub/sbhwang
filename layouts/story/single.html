@@ -1,0 +1,789 @@
+{{ $lang    := .Site.Language.Lang }}
+{{ $author  := hugo.Data.author }}
+{{ $profile := $author.profile }}
+{{ $social  := $profile.social }}
+{{ $kws     := index $profile.keywords $lang }}
+
+{{ $kwPositions := slice
+  (dict "pos" "top:18%;left:8%"      "dur" "7s"    "delay" "0s")
+  (dict "pos" "top:38%;right:12%"    "dur" "9s"    "delay" "-2.5s")
+  (dict "pos" "bottom:28%;left:14%"  "dur" "8s"    "delay" "-4s")
+  (dict "pos" "top:60%;right:10%"    "dur" "10.5s" "delay" "-1.5s")
+  (dict "pos" "top:25%;left:50%"     "dur" "8.5s"  "delay" "-3s")
+  (dict "pos" "bottom:18%;left:42%"  "dur" "7.5s"  "delay" "-5s")
+  (dict "pos" "top:72%;left:30%"     "dur" "11s"   "delay" "-2s")
+  (dict "pos" "bottom:42%;right:5%"  "dur" "9.5s"  "delay" "-6s")
+}}
+
+<!DOCTYPE html>
+<html lang="{{ $lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ index $profile.name $lang }} · Story</title>
+  <meta name="description" content="{{ index $profile.affiliation $lang }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #09090b;
+      --surface:     #18181b;
+      --surface2:    #27272a;
+      --border:      #3f3f46;
+      --border-faint:#2a2a2e;
+      --text:        #fafafa;
+      --muted:       #a1a1aa;
+      --dim:         #71717a;
+      --accent:      #6366f1;
+      --accent-glow: rgba(99,102,241,0.25);
+      --gold:        #f59e0b;
+      --green:       #10b981;
+      --blue:        #3b82f6;
+      --red:         #f43f5e;
+    }
+
+    html { background: var(--bg); scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed; top: 0; left: 0; z-index: 200;
+      height: 2px; background: linear-gradient(90deg, var(--accent), #8b5cf6);
+      width: 0%; transition: width 0.08s linear;
+      box-shadow: 0 0 8px rgba(99,102,241,0.6);
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      position: fixed; top: 1.1rem; left: 1.1rem; z-index: 150;
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em;
+      color: var(--muted); background: rgba(24,24,27,0.85);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border); border-radius: 0.375rem;
+      padding: 0.3rem 0.65rem; text-decoration: none;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .back-link:hover { color: var(--text); border-color: rgba(99,102,241,0.5); }
+
+    /* ── Chapter nav dots ── */
+    #chapter-dots {
+      position: fixed; right: 1.25rem; top: 50%; transform: translateY(-50%);
+      z-index: 150; display: flex; flex-direction: column; gap: 0.6rem;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .dot.active { background: var(--accent); transform: scale(1.5); box-shadow: 0 0 6px rgba(99,102,241,0.6); }
+
+    /* ══════════════════════════════════════
+       SCROLLYTELLING LAYOUT
+    ══════════════════════════════════════ */
+    .scrolly {
+      display: grid;
+      grid-template-columns: 45% 55%;
+    }
+
+    /* Left sticky visual column */
+    .visual-col {
+      position: sticky; top: 0;
+      height: 100vh; overflow: hidden;
+    }
+
+    /* Visual panels (stacked, toggled by JS) */
+    .panel {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2.5rem;
+      opacity: 0;
+      transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+    }
+    .panel.active { opacity: 1; pointer-events: auto; }
+
+    /* Right scrolling column */
+    .content-col { /* normal flow */ }
+
+    /* ── Chapters ── */
+    .chapter {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 6rem 3.5rem 6rem 2.5rem;
+      position: relative;
+    }
+    .chapter-inner {
+      max-width: 460px;
+      opacity: 0; transform: translateY(1.5rem);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .chapter-inner.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Chapter typography ── */
+    .ch-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 1.1rem;
+    }
+    .ch-label::before {
+      content: ''; display: block;
+      width: 20px; height: 2px;
+      background: var(--accent); border-radius: 1px;
+    }
+
+    .ch-title {
+      font-size: clamp(1.6rem, 3vw, 2.1rem);
+      font-weight: 800; line-height: 1.2;
+      letter-spacing: -0.025em; color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+
+    .ch-body {
+      font-size: 0.92rem; color: var(--muted);
+      line-height: 1.8; margin-bottom: 1.4rem;
+      font-weight: 400;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border-faint);
+      border-radius: 0.625rem;
+      padding: 0.875rem 1.125rem;
+      margin-bottom: 0.55rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .card:hover { border-color: rgba(99,102,241,0.4); transform: translateX(2px); }
+
+    /* ── Tags / chips ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1rem; }
+    .tag {
+      padding: 0.25rem 0.7rem;
+      border-radius: 9999px; font-size: 0.72rem; font-weight: 500;
+    }
+    .tag-indigo { background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.28); color: #a5b4fc; }
+    .tag-green  { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.25); color: #6ee7b7; }
+    .tag-gold   { background: rgba(245,158,11,0.10); border: 1px solid rgba(245,158,11,0.25); color: #fcd34d; }
+
+    /* ── Divider ── */
+    .sect-divider {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--dim);
+      margin: 1.25rem 0 0.7rem; display: flex; align-items: center; gap: 0.6rem;
+    }
+    .sect-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border-faint);
+    }
+
+    /* ════════════════════════════════════
+       VISUAL PANEL INTERNALS
+    ════════════════════════════════════ */
+
+    /* Dot grid shared background */
+    .dot-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image: radial-gradient(circle, rgba(99,102,241,0.12) 1px, transparent 1px);
+      background-size: 26px 26px;
+      pointer-events: none;
+    }
+
+    /* ── Panel 0: Intro ── */
+    #p0 { background: radial-gradient(ellipse at 50% 45%, rgba(99,102,241,0.1) 0%, transparent 65%); }
+
+    .intro-center { position: relative; z-index: 1; text-align: center; }
+    .avatar-wrap {
+      width: 90px; height: 90px;
+      border-radius: 50%; overflow: hidden;
+      border: 2px solid rgba(99,102,241,0.45);
+      box-shadow: 0 0 30px rgba(99,102,241,0.22), 0 0 60px rgba(99,102,241,0.1);
+      margin: 0 auto 1.1rem;
+    }
+    .avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+
+    .intro-name {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 900; letter-spacing: -0.03em; line-height: 1.05;
+      background: linear-gradient(135deg, #fff 0%, #c7d2fe 50%, #a5b4fc 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .float-kw {
+      position: absolute;
+      background: rgba(99,102,241,0.09);
+      border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 9999px;
+      padding: 0.3rem 0.8rem;
+      font-size: 0.68rem; font-weight: 500; color: rgba(165,180,252,0.65);
+      animation: kwFloat ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes kwFloat {
+      from { transform: translateY(0) rotate(-1deg); opacity: 0.5; }
+      to   { transform: translateY(-12px) rotate(1deg); opacity: 0.85; }
+    }
+
+    /* ── Panel 1: Academic ── */
+    #p1 { background: linear-gradient(145deg, rgba(99,102,241,0.05) 0%, rgba(139,92,246,0.07) 100%); }
+
+    .math-bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+    .ms {
+      position: absolute;
+      font-family: 'JetBrains Mono', monospace;
+      color: rgba(99,102,241,0.14);
+      animation: msDrift ease-in-out infinite alternate;
+      user-select: none;
+    }
+    @keyframes msDrift {
+      from { transform: translateY(0) scale(1); opacity: 0.12; }
+      to   { transform: translateY(-10px) scale(1.05); opacity: 0.28; }
+    }
+
+    .degree-card {
+      position: relative; z-index: 1;
+      background: var(--surface);
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 1rem; padding: 1.5rem 1.75rem;
+      width: 100%; max-width: 300px; text-align: center;
+      box-shadow: 0 0 40px rgba(99,102,241,0.08);
+    }
+    .deg-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 2.75rem; height: 2.75rem; border-radius: 50%;
+      background: rgba(99,102,241,0.14); border: 1px solid rgba(99,102,241,0.3);
+      font-size: 1.25rem; margin-bottom: 0.75rem;
+    }
+
+    /* ── Panel 2: Books ── */
+    #p2 { background: radial-gradient(ellipse at 35% 55%, rgba(245,158,11,0.07) 0%, transparent 60%); }
+
+    .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; width: 100%; max-width: 320px; position: relative; z-index: 1; }
+    .book-tile {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--gold); border-radius: 0.5rem;
+      padding: 0.8rem 0.9rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .book-tile:hover { transform: translateY(-3px); border-color: rgba(245,158,11,0.6); }
+    .book-tile .bt-title { font-size: 0.7rem; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 0.25rem; }
+    .book-tile .bt-pub   { font-size: 0.62rem; color: var(--dim); }
+    .book-tile.textbook { grid-column: 1 / -1; border-left-color: var(--accent); }
+
+    /* ── Panel 3: Tech ── */
+    #p3 { background: radial-gradient(ellipse at 40% 35%, rgba(16,185,129,0.06) 0%, transparent 60%); }
+
+    .terminal-win {
+      position: relative; z-index: 1;
+      background: #0d1117;
+      border: 1px solid rgba(16,185,129,0.22);
+      border-radius: 0.75rem; overflow: hidden;
+      width: 100%; max-width: 320px;
+      box-shadow: 0 0 40px rgba(16,185,129,0.07);
+    }
+    .t-titlebar {
+      background: #161b22; padding: 0.65rem 0.875rem;
+      display: flex; align-items: center; gap: 0.35rem;
+      border-bottom: 1px solid rgba(16,185,129,0.12);
+    }
+    .td { width: 10px; height: 10px; border-radius: 50%; }
+    .td-r { background: #ff5f57; } .td-y { background: #febc2e; } .td-g { background: #28c840; }
+    .t-filename { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: rgba(16,185,129,0.6); margin-left: auto; }
+    .t-body { padding: 1rem 1.125rem; font-family: 'JetBrains Mono', monospace; }
+    .tl { font-size: 0.68rem; line-height: 1.9; display: block; }
+    .t-c  { color: #6e7681; }    /* comment */
+    .t-kw { color: #ff7b72; }    /* keyword */
+    .t-fn { color: #d2a8ff; }    /* function */
+    .t-st { color: #a5d6ff; }    /* string */
+    .t-va { color: #ffa657; }    /* variable */
+    .t-nm { color: #79c0ff; }    /* number */
+    .t-ok { color: #7ee787; }    /* output/ok */
+
+    /* ── Panel 4: Community ── */
+    #p4 { background: radial-gradient(ellipse at 55% 45%, rgba(59,130,246,0.07) 0%, transparent 60%); }
+
+    .comm-inner { position: relative; z-index: 1; width: 100%; max-width: 300px; }
+    .comm-node {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.7rem 0.875rem;
+      background: var(--surface); border: 1px solid var(--border-faint);
+      border-radius: 0.5rem; margin-bottom: 0.45rem;
+      transition: border-color 0.2s;
+    }
+    .comm-node:hover { border-color: rgba(59,130,246,0.4); }
+    .cn-icon {
+      width: 1.875rem; height: 1.875rem; flex-shrink: 0;
+      background: rgba(59,130,246,0.12); border-radius: 0.375rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.875rem;
+    }
+    .cn-title { font-size: 0.75rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+    .cn-sub   { font-size: 0.65rem; color: var(--dim); margin-top: 0.1rem; }
+
+    /* Social button row */
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem; margin-top: 0.875rem; }
+    .soc-btn {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.45rem 0.7rem;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 0.4rem; font-size: 0.68rem; font-weight: 500;
+      color: var(--muted); text-decoration: none;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .soc-btn:hover { color: var(--text); border-color: rgba(99,102,241,0.45); background: rgba(99,102,241,0.07); }
+
+    /* ══════════════════════════════
+       MOBILE
+    ══════════════════════════════ */
+    @media (max-width: 767px) {
+      .scrolly { display: block; }
+      .visual-col { position: relative; height: 55vw; min-height: 220px; max-height: 320px; }
+      .chapter { padding: 2.5rem 1.25rem; min-height: auto; }
+      .ch-title { font-size: 1.4rem; }
+      .ch-body  { font-size: 0.875rem; }
+      #chapter-dots { display: none; }
+      .back-link { top: 0.6rem; left: 0.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<a href="{{ if eq $lang "ko" }}/{{ else }}/en/{{ end }}" class="back-link">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+  Home
+</a>
+
+<!-- Chapter nav dots -->
+<nav id="chapter-dots" aria-hidden="true">
+  <div class="dot active" data-target="0"></div>
+  <div class="dot" data-target="1"></div>
+  <div class="dot" data-target="2"></div>
+  <div class="dot" data-target="3"></div>
+  <div class="dot" data-target="4"></div>
+</nav>
+
+<div class="scrolly">
+
+  <!-- ══════════════════════════════════════
+       LEFT COLUMN: STICKY VISUAL PANELS
+  ══════════════════════════════════════ -->
+  <div class="visual-col">
+
+    <div class="dot-grid"></div>
+
+    <!-- ── Panel 0: Intro ── -->
+    <div class="panel active" id="p0" data-panel="0">
+      <!-- Floating keywords -->
+      {{ range $i, $kw := $kws }}
+      {{ if lt $i (len $kwPositions) }}
+      {{ $pd := index $kwPositions $i }}
+      <div class="float-kw" style="{{ $pd.pos }};animation-duration:{{ $pd.dur }};animation-delay:{{ $pd.delay }}">{{ $kw }}</div>
+      {{ end }}
+      {{ end }}
+      <!-- Extra decorative chips -->
+      <div class="float-kw" style="top:48%;left:60%;animation-duration:12s;animation-delay:-7s;">Ph.D.</div>
+      <div class="float-kw" style="bottom:12%;right:25%;animation-duration:9.5s;animation-delay:-4.5s;">SNU</div>
+
+      <div class="intro-center">
+        {{ with $profile.avatar }}
+        <div class="avatar-wrap">
+          <img src="{{ . | relURL }}" alt="{{ index $profile.name $lang }}">
+        </div>
+        {{ end }}
+        <div class="intro-name">{{ index $profile.name $lang }}</div>
+        <div style="font-size:0.72rem; color:var(--dim); margin-top:0.6rem; letter-spacing:0.04em;">
+          {{ if eq $lang "ko" }}수학교사 · 연구자 · 저자{{ else }}Teacher · Researcher · Author{{ end }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Panel 1: Academic ── -->
+    <div class="panel" id="p1" data-panel="1">
+      <div class="math-bg">
+        <span class="ms" style="top:12%;left:8%;font-size:2.2rem;animation-duration:6s;">∑</span>
+        <span class="ms" style="top:30%;right:10%;font-size:3rem;animation-duration:8s;animation-delay:-3s;">∫</span>
+        <span class="ms" style="top:55%;left:12%;font-size:2rem;animation-duration:7s;animation-delay:-1.5s;">μ</span>
+        <span class="ms" style="bottom:22%;right:14%;font-size:1.8rem;animation-duration:9s;animation-delay:-4s;">σ²</span>
+        <span class="ms" style="top:45%;left:52%;font-size:2rem;animation-duration:10s;animation-delay:-2s;">∂</span>
+        <span class="ms" style="top:20%;left:42%;font-size:2.5rem;animation-duration:7.5s;animation-delay:-2.5s;">π</span>
+        <span class="ms" style="bottom:35%;left:38%;font-size:1.6rem;animation-duration:8.5s;animation-delay:-3.5s;">Δ</span>
+        <span class="ms" style="top:68%;right:8%;font-size:1.5rem;animation-duration:11s;animation-delay:-1s;">∞</span>
+      </div>
+      <div class="degree-card">
+        <div class="deg-icon">🎓</div>
+        {{ range first 1 (index $author.education $lang) }}
+        <div style="font-size:0.8rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:0.3rem;">{{ .title }}</div>
+        <div style="font-size:0.7rem;color:var(--muted);">{{ .period }}</div>
+        {{ if .description }}<div style="font-size:0.65rem;color:var(--dim);margin-top:0.15rem;">{{ .description }}</div>{{ end }}
+        {{ end }}
+        <div style="margin-top:1rem;padding-top:0.875rem;border-top:1px solid var(--border-faint);">
+          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.4rem;">Research Focus</div>
+          <div style="font-size:0.68rem;color:var(--dim);line-height:1.6;">
+            AI 형성적 평가 · 통계 시각화<br>데이터 리터러시 · IRT 분석
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Panel 2: Books ── -->
+    <div class="panel" id="p2" data-panel="2">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%, rgba(245,158,11,0.06) 0%, transparent 55%);pointer-events:none;"></div>
+      <div class="book-grid">
+        {{ range $author.books }}
+        <div class="book-tile">
+          <div class="bt-title">{{ index .title $lang }}</div>
+          <div class="bt-pub">{{ .publisher }} · {{ .year }}</div>
+        </div>
+        {{ end }}
+        {{ range $author.textbooks }}
+        <div class="book-tile textbook">
+          <div style="font-size:0.55rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.2rem;">교과서</div>
+          <div class="bt-title">{{ index .title $lang }}</div>
+          <div class="bt-pub">{{ .publisher }} · {{ .year }}</div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- ── Panel 3: Tech (Terminal) ── -->
+    <div class="panel" id="p3" data-panel="3">
+      <div class="terminal-win">
+        <div class="t-titlebar">
+          <div class="td td-r"></div>
+          <div class="td td-y"></div>
+          <div class="td td-g"></div>
+          <span class="t-filename">statistics_edu.py</span>
+        </div>
+        <div class="t-body">
+          <span class="tl"><span class="t-c"># Plotifai · Interactive Viz Tool</span></span>
+          <span class="tl"><span class="t-kw">import</span> <span class="t-va">pandas</span> <span class="t-kw">as</span> <span class="t-va">pd</span></span>
+          <span class="tl"><span class="t-kw">import</span> <span class="t-va">streamlit</span> <span class="t-kw">as</span> <span class="t-va">st</span></span>
+          <span class="tl">&nbsp;</span>
+          <span class="tl"><span class="t-c"># AI Formative Assessment</span></span>
+          <span class="tl"><span class="t-fn">@st.cache_data</span></span>
+          <span class="tl"><span class="t-kw">def</span> <span class="t-fn">analyze_feedback</span>(<span class="t-va">df</span>):</span>
+          <span class="tl">&nbsp;&nbsp;<span class="t-va">model</span> = <span class="t-fn">load_llm</span>(<span class="t-st">"gpt-4o"</span>)</span>
+          <span class="tl">&nbsp;&nbsp;<span class="t-kw">return</span> <span class="t-va">model</span>.<span class="t-fn">evaluate</span>(<span class="t-va">df</span>)</span>
+          <span class="tl">&nbsp;</span>
+          <span class="tl"><span class="t-c"># R: IRT Analysis (ggplot2)</span></span>
+          <span class="tl"><span class="t-c"># fit_irt(data, model="2PL")</span></span>
+          <span class="tl">&nbsp;</span>
+          <span class="tl"><span class="t-ok">▶ Running · localhost:8501</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Panel 4: Community ── -->
+    <div class="panel" id="p4" data-panel="4">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 55% 40%, rgba(59,130,246,0.07) 0%, transparent 55%);pointer-events:none;"></div>
+      <div class="comm-inner">
+        {{ range index $author.experience $lang }}
+        <div class="comm-node">
+          <div class="cn-icon">
+            {{ if in .title "고등학교" }}🏫
+            {{ else if in .title "중학교" }}🏫
+            {{ else }}🌐{{ end }}
+          </div>
+          <div>
+            <div class="cn-title">{{ .title }}</div>
+            <div class="cn-sub">{{ .period }}</div>
+          </div>
+        </div>
+        {{ end }}
+
+        <div class="social-grid">
+          {{ with $social.github }}
+          <a href="{{ . }}" target="_blank" rel="noopener" class="soc-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+          {{ end }}
+          {{ with $social.youtube }}
+          <a href="{{ . }}" target="_blank" rel="noopener" class="soc-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            YouTube
+          </a>
+          {{ end }}
+          {{ with $profile.google_scholar }}
+          <a href="{{ . }}" target="_blank" rel="noopener" class="soc-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M5.242 13.769 0 9.5 12 0l12 9.5-5.242 4.269C17.548 11.249 14.978 9.5 12 9.5c-2.977 0-5.548 1.748-6.758 4.269zM12 10a7 7 0 1 0 0 14 7 7 0 0 0 0-14z"/></svg>
+            Scholar
+          </a>
+          {{ end }}
+          {{ with $social.blog }}
+          <a href="{{ . }}" target="_blank" rel="noopener" class="soc-btn">✍ Blog</a>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /visual-col -->
+
+
+  <!-- ══════════════════════════════════════
+       RIGHT COLUMN: SCROLLING CHAPTERS
+  ══════════════════════════════════════ -->
+  <div class="content-col">
+
+    <!-- ── Ch.0: Intro ── -->
+    <div class="chapter" id="ch0" data-chapter="0">
+      <div class="chapter-inner">
+        <div class="ch-label">Introduction</div>
+        <h2 class="ch-title">{{ index $profile.name $lang }}</h2>
+        <p class="ch-body">{{ index $profile.affiliation $lang }}</p>
+        <div class="tags">
+          {{ range $kws }}
+          <span class="tag tag-indigo">{{ . }}</span>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Ch.1: Academic & Research ── -->
+    <div class="chapter" id="ch1" data-chapter="1">
+      <div class="chapter-inner">
+        <div class="ch-label">Academic &amp; Research</div>
+        <h2 class="ch-title">{{ if eq $lang "ko" }}연구자로서의<br>여정{{ else }}The Research<br>Journey{{ end }}</h2>
+        <p class="ch-body">{{ index $author.research_overview $lang }}</p>
+
+        <div class="sect-divider">{{ if eq $lang "ko" }}학력{{ else }}Education{{ end }}</div>
+        {{ range index $author.education $lang }}
+        <div class="card">
+          <div style="font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;line-height:1.4;">{{ .title }}</div>
+          <div style="font-size:0.75rem;color:var(--dim);">{{ .period }}{{ if .description }} · {{ .description }}{{ end }}</div>
+        </div>
+        {{ end }}
+
+        {{ if $author.publications }}
+        <div class="sect-divider">{{ if eq $lang "ko" }}최근 논문{{ else }}Recent Papers{{ end }}</div>
+        {{ range first 2 $author.publications }}
+        <div style="padding:0.7rem 0;border-bottom:1px solid var(--border-faint);">
+          <div style="font-size:0.8rem;font-weight:600;color:var(--text);line-height:1.45;margin-bottom:0.2rem;">{{ .title }}</div>
+          <div style="font-size:0.7rem;color:var(--dim);">{{ range .authors }}{{ . }},&nbsp;{{ end }}({{ .year }}) · <em>{{ .journal }}</em></div>
+        </div>
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- ── Ch.2: Author & Educator ── -->
+    <div class="chapter" id="ch2" data-chapter="2">
+      <div class="chapter-inner">
+        <div class="ch-label">Author &amp; Educator</div>
+        <h2 class="ch-title">{{ if eq $lang "ko" }}교육과<br>글쓰기{{ else }}Books &amp;<br>Education{{ end }}</h2>
+        <p class="ch-body">
+          {{ if eq $lang "ko" }}수학교사이자 저자로서, 복잡한 개념을 쉽고 명쾌하게 전달하는 책들을 집필했습니다. 독자들이 데이터와 친해질 수 있도록 안내합니다.
+          {{ else }}As a math teacher and author, writing books that make complex ideas accessible · guiding readers to become comfortable with data and statistics.{{ end }}
+        </p>
+
+        <div class="sect-divider">{{ if eq $lang "ko" }}저서{{ else }}Books{{ end }}</div>
+        {{ range $author.books }}
+        <div class="card" style="display:flex;gap:0.875rem;align-items:flex-start;">
+          <div style="width:3px;align-self:stretch;background:var(--gold);border-radius:2px;flex-shrink:0;min-height:2rem;"></div>
+          <div>
+            <div style="font-size:0.875rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:0.2rem;">{{ index .title $lang }}</div>
+            <div style="font-size:0.75rem;color:var(--dim);">{{ .publisher }} · {{ .year }}</div>
+          </div>
+        </div>
+        {{ end }}
+
+        {{ range $author.textbooks }}
+        <div class="sect-divider">{{ if eq $lang "ko" }}교과서{{ else }}Textbook{{ end }}</div>
+        <div class="card" style="border-color:rgba(99,102,241,0.25);">
+          <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:0.35rem;">2022 개정 교육과정</div>
+          <div style="font-size:0.875rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:0.2rem;">{{ index .title $lang }}</div>
+          <div style="font-size:0.75rem;color:var(--dim);">{{ .publisher }} · {{ .year }}</div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- ── Ch.3: Tech & Projects ── -->
+    <div class="chapter" id="ch3" data-chapter="3">
+      <div class="chapter-inner">
+        <div class="ch-label">Tech &amp; Projects</div>
+        <h2 class="ch-title">{{ if eq $lang "ko" }}수학과<br>코딩의 교차점{{ else }}Where Math<br>Meets Code{{ end }}</h2>
+        <p class="ch-body">
+          {{ if eq $lang "ko" }}통계 교육을 위한 인터랙티브 도구 개발부터 AI 기반 형성적 평가 시스템까지, 기술로 교육의 경계를 넓혀갑니다.
+          {{ else }}From interactive tools for statistics education to AI-driven formative assessment systems · expanding education's boundaries through technology.{{ end }}
+        </p>
+
+        <div class="sect-divider">{{ if eq $lang "ko" }}기술 스택{{ else }}Tech Stack{{ end }}</div>
+        {{ range $author.skills }}
+        <div style="margin-bottom:0.75rem;">
+          <div style="font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin-bottom:0.4rem;">{{ .category }}</div>
+          <div class="tags" style="margin-top:0;">
+            {{ range .items }}<span class="tag tag-green">{{ . }}</span>{{ end }}
+          </div>
+        </div>
+        {{ end }}
+
+        <div class="sect-divider">Projects</div>
+        {{ range $author.projects }}
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem;margin-bottom:0.35rem;">
+            <div style="font-size:0.875rem;font-weight:700;color:var(--text);">{{ .title }}</div>
+            {{ if .status }}<span style="font-size:0.58rem;font-weight:600;padding:0.15rem 0.5rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.22);border-radius:9999px;color:#6ee7b7;white-space:nowrap;flex-shrink:0;">{{ .status }}</span>{{ end }}
+          </div>
+          <div style="font-size:0.78rem;color:var(--muted);line-height:1.65;">{{ index .description $lang }}</div>
+        </div>
+        {{ end }}
+
+        {{ if $author.talks }}
+        <div class="sect-divider">Talks</div>
+        {{ range $author.talks }}
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid var(--border-faint);">
+          <span style="color:var(--green);margin-top:0.1rem;flex-shrink:0;">▶</span>
+          <div>
+            <div style="font-size:0.82rem;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:0.15rem;">{{ index .title $lang }}</div>
+            <div style="font-size:0.7rem;color:var(--dim);">{{ .event }} · {{ .date }}{{ if .location }}, {{ .location }}{{ end }}</div>
+          </div>
+        </div>
+        {{ end }}
+        {{ end }}
+      </div>
+    </div>
+
+    <!-- ── Ch.4: Community & Closing ── -->
+    <div class="chapter" id="ch4" data-chapter="4">
+      <div class="chapter-inner">
+        <div class="ch-label">Community &amp; Social</div>
+        <h2 class="ch-title">{{ if eq $lang "ko" }}연결과<br>공유{{ else }}Connection<br>&amp; Sharing{{ end }}</h2>
+        <p class="ch-body">
+          {{ if eq $lang "ko" }}교사, 연구자, 개발자로서 다양한 커뮤니티와 함께 배우고 나눕니다. 교육 현장과 연구 사이에서 두 세계를 잇는 다리가 되고자 합니다.
+          {{ else }}As a teacher, researcher, and developer · learning and sharing across communities, bridging the gap between the classroom and research.{{ end }}
+        </p>
+
+        <div class="sect-divider">{{ if eq $lang "ko" }}경력{{ else }}Experience{{ end }}</div>
+        {{ range index $author.experience $lang }}
+        <div class="card">
+          <div style="font-size:0.875rem;font-weight:700;color:var(--text);margin-bottom:0.25rem;line-height:1.4;">{{ .title }}</div>
+          <div style="font-size:0.75rem;color:var(--dim);margin-bottom:{{ if .links }}0.55rem{{ else }}0{{ end }};">{{ .period }}{{ if .description }} · {{ .description }}{{ end }}</div>
+          {{ if .links }}
+          <div style="display:flex;flex-wrap:wrap;gap:0.35rem;">
+            {{ range .links }}
+            <a href="{{ .url }}" target="_blank" rel="noopener" style="font-size:0.68rem;font-weight:500;color:var(--blue);text-decoration:none;padding:0.15rem 0.55rem;border:1px solid rgba(59,130,246,0.3);border-radius:9999px;transition:all 0.15s;">{{ .text }}</a>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        <!-- Connect -->
+        <div class="sect-divider">Connect</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;">
+          {{ with $social.email }}
+          <a href="mailto:{{ . }}" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">
+            ✉ <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ . }}</span>
+          </a>
+          {{ end }}
+          {{ with $social.github }}
+          <a href="{{ . }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">⌥ GitHub</a>
+          {{ end }}
+          {{ with $social.youtube }}
+          <a href="{{ . }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">▶ YouTube</a>
+          {{ end }}
+          {{ with $profile.google_scholar }}
+          <a href="{{ . }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">◎ Scholar</a>
+          {{ end }}
+          {{ with $social.linkedin }}
+          <a href="{{ . }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">in LinkedIn</a>
+          {{ end }}
+          {{ with $social.blog }}
+          <a href="{{ . }}" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:0.45rem;padding:0.55rem 0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:0.5rem;text-decoration:none;font-size:0.75rem;font-weight:500;color:var(--muted);transition:all 0.15s;" class="soc-btn">✍ Blog</a>
+          {{ end }}
+        </div>
+
+        <!-- Closing -->
+        <div style="margin-top:3rem;padding-top:2rem;border-top:1px solid var(--border-faint);text-align:center;">
+          <div style="font-size:0.7rem;color:var(--dim);letter-spacing:0.06em;">
+            {{ if eq $lang "ko" }}읽어주셔서 감사합니다{{ else }}Thank you for reading{{ end }}
+          </div>
+          <div style="font-size:1.5rem;font-weight:900;letter-spacing:-0.02em;color:var(--text);margin-top:0.4rem;">
+            {{ index $profile.name $lang }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /content-col -->
+</div><!-- /scrolly -->
+
+<script>
+(function () {
+
+  /* ── Progress bar ── */
+  var prog = document.getElementById('progress');
+  function updateProgress() {
+    var h = document.body.scrollHeight - window.innerHeight;
+    prog.style.width = (h > 0 ? window.scrollY / h * 100 : 0) + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+
+  /* ── Panel switching + dot nav ── */
+  var chapters = document.querySelectorAll('[data-chapter]');
+  var panels   = document.querySelectorAll('[data-panel]');
+  var dots     = document.querySelectorAll('#chapter-dots .dot');
+
+  function activateChapter(idx) {
+    panels.forEach(function (p) { p.classList.remove('active'); });
+    dots.forEach(function (d)   { d.classList.remove('active'); });
+    var panel = document.querySelector('[data-panel="' + idx + '"]');
+    if (panel) panel.classList.add('active');
+    if (dots[idx]) dots[idx].classList.add('active');
+  }
+
+  var panelObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        activateChapter(Number(entry.target.getAttribute('data-chapter')));
+      }
+    });
+  }, { threshold: 0.35, rootMargin: '0px 0px -8% 0px' });
+
+  chapters.forEach(function (c) { panelObserver.observe(c); });
+
+  /* ── Content fade-in ── */
+  var innerObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.chapter-inner').forEach(function (el) {
+    innerObserver.observe(el);
+  });
+
+  /* ── Dot click: scroll to chapter ── */
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () {
+      var target = document.getElementById('ch' + dot.getAttribute('data-target'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  /* Initial state */
+  activateChapter(0);
+  var firstInner = document.querySelector('.chapter-inner');
+  if (firstInner) firstInner.classList.add('visible');
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang }}" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ if and .Title (ne .Title .Site.Title) }}{{ .Title }}_{{ end }}{{ .Site.Title }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.subtitle }}{{ end }}">
+  <link rel="canonical" href="{{ .Permalink }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            'g-blue':   '#1a73e8',
+            'g-dark':   '#202124',
+            'g-gray':   '#5f6368',
+            'g-border': '#dadce0',
+            'g-chip':   '#f1f3f4',
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; }
+
+    .nav-shadow { box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
+
+    .sidebar-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.5rem 0.75rem; border-radius: 0.375rem;
+      font-size: 0.875rem; font-weight: 500; color: #5f6368; cursor: pointer;
+      transition: all 0.15s; user-select: none;
+    }
+    .sidebar-link:hover { color: #202124; background: #f1f3f4; }
+    .sidebar-link.active { color: #202124; font-weight: 600; background: transparent; }
+
+    .sub-link {
+      display: block; padding: 0.35rem 0.75rem 0.35rem 2rem; border-radius: 0.25rem;
+      font-size: 0.8125rem; font-weight: 400; color: #5f6368;
+      transition: all 0.15s;
+    }
+    .sub-link:hover { color: #202124; background: #f1f3f4; }
+
+    .mobile-link {
+      display: block; padding: 0.75rem 1.25rem;
+      font-size: 1rem; font-weight: 500; color: #202124;
+      border-radius: 0.5rem; transition: background 0.15s;
+    }
+    .mobile-link:hover { background: #f1f3f4; }
+    .mobile-sub {
+      display: block; padding: 0.5rem 1.25rem 0.5rem 2.5rem;
+      font-size: 0.9375rem; font-weight: 400; color: #5f6368;
+      border-radius: 0.375rem; transition: background 0.15s;
+    }
+    .mobile-sub:hover { background: #f1f3f4; }
+
+    .chevron { transition: transform 0.2s; width: 16px; height: 16px; flex-shrink: 0; }
+    .chevron.open { transform: rotate(90deg); }
+
+    .children-wrap { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
+    .children-wrap.open { max-height: 300px; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    .menu-overlay { animation: fadeIn 0.15s ease; }
+    .menu-panel { animation: slideDown 0.2s ease; }
+
+    .social-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 2.25rem; height: 2.25rem; border-radius: 50%;
+      color: #5f6368; transition: all 0.2s;
+    }
+    .social-btn:hover { color: #202124; background: #f1f3f4; transform: scale(1.08); }
+
+    .keyword-chip {
+      padding: 0.5rem 1rem;
+      background: #f1f3f4; border-radius: 9999px;
+      font-size: 0.875rem; color: #202124; font-weight: 500;
+      transition: background 0.15s;
+    }
+    .keyword-chip:hover { background: #e8eaed; }
+
+    .section-title {
+      font-size: 0.875rem; font-weight: 600;
+      color: rgba(32,33,36,0.6); letter-spacing: 0.05em;
+      margin-bottom: 1rem; padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(218,220,224,0.3);
+    }
+
+    .skill-chip {
+      padding: 0.375rem 0.875rem;
+      background: #f1f3f4; border-radius: 9999px;
+      font-size: 0.875rem; color: #202124;
+      transition: background 0.15s;
+    }
+    .skill-chip:hover { background: #e8eaed; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-item { opacity: 0; animation: fadeUp 0.5s ease forwards; }
+    .hero-item:nth-child(1) { animation-delay: 0.05s; }
+    .hero-item:nth-child(2) { animation-delay: 0.12s; }
+    .hero-item:nth-child(3) { animation-delay: 0.19s; }
+    .hero-item:nth-child(4) { animation-delay: 0.26s; }
+    .hero-item:nth-child(5) { animation-delay: 0.33s; }
+
+    .section-card {
+      padding: 0.875rem 0.75rem; margin-bottom: 0.875rem;
+      border-left: 3px solid #dadce0; border-radius: 0 0.5rem 0.5rem 0;
+      transition: border-color 0.2s;
+    }
+    .section-card:hover { border-left-color: #1a73e8; }
+    @media (min-width: 768px) { .section-card { padding: 1rem 1.25rem; } }
+  </style>
+</head>
+
+<body class="min-h-screen bg-white font-sans text-g-dark">
+
+  {{ $lang := .Site.Language.Lang }}
+
+  {{/* ── Nav data ── */}}
+  {{ $nav := cond (eq $lang "ko") (slice
+    (dict "id" "about" "label" "소개")
+    (dict "id" "career" "label" "경력" "children" (slice
+      (dict "id" "education" "label" "학력")
+      (dict "id" "experience" "label" "경력")
+      (dict "id" "skills" "label" "기술")
+      (dict "id" "certifications" "label" "자격증")))
+    (dict "id" "publications" "label" "출판" "children" (slice
+      (dict "id" "journal-papers" "label" "학술 논문")
+      (dict "id" "books" "label" "저서")
+      (dict "id" "textbook" "label" "교과서")))
+    (dict "id" "activities" "label" "활동" "children" (slice
+      (dict "id" "talks" "label" "발표")
+      (dict "id" "projects" "label" "프로젝트"))))
+  (slice
+    (dict "id" "about" "label" "About")
+    (dict "id" "career" "label" "Career" "children" (slice
+      (dict "id" "education" "label" "Education")
+      (dict "id" "experience" "label" "Experience")
+      (dict "id" "skills" "label" "Skills")
+      (dict "id" "certifications" "label" "Certifications")))
+    (dict "id" "publications" "label" "Publications" "children" (slice
+      (dict "id" "journal-papers" "label" "Journal Papers")
+      (dict "id" "books" "label" "Books")
+      (dict "id" "textbook" "label" "Textbook")))
+    (dict "id" "activities" "label" "Activities" "children" (slice
+      (dict "id" "talks" "label" "Talks")
+      (dict "id" "projects" "label" "Projects"))))
+  }}
+
+  {{/* ── Desktop Sidebar ── */}}
+  <aside class="hidden md:flex fixed inset-y-0 left-0 z-50 w-52 flex-col border-r border-g-border bg-white">
+    <div class="px-6 pt-8 pb-6">
+      <a href="#about" class="text-lg font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
+    </div>
+    <nav id="sidebar-nav" class="flex-1 px-3 space-y-0.5 overflow-y-auto">
+      {{ range $nav }}
+      {{ $pid := .id }}
+      <div class="nav-group">
+        <a href="#{{ .id }}"
+           class="sidebar-link{{ if not .children }} active{{ end }}"
+           data-section="{{ .id }}"
+           {{ if .children }}onclick="toggleNav(this)"{{ end }}>
+          <span>{{ .label }}</span>
+          {{ if .children }}
+          <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+          {{ end }}
+        </a>
+        {{ if .children }}
+        <div class="children-wrap">
+          {{ range .children }}
+          <a href="#{{ .id }}" class="sub-link" data-parent="{{ $pid }}">{{ .label }}</a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+      {{ end }}
+    </nav>
+    <div class="px-6 py-5 border-t border-g-border text-[13px]">
+      {{ if eq $lang "ko" }}
+      <a href="/en/" class="font-medium text-g-gray hover:text-g-dark transition-colors">English</a>
+      {{ else }}
+      <a href="/" class="font-medium text-g-gray hover:text-g-dark transition-colors">한국어</a>
+      {{ end }}
+    </div>
+  </aside>
+
+  {{/* ── Mobile Header ── */}}
+  <header id="mobile-header" class="md:hidden sticky top-0 z-50 bg-white border-b border-g-border transition-shadow duration-200">
+    <div class="max-w-5xl mx-auto px-6 h-[60px] flex items-center justify-between">
+      <a href="#about" class="text-[17px] font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
+      <button id="hamburger-btn" class="p-2 -mr-2 text-g-gray hover:text-g-dark transition-colors" aria-label="Menu">
+        <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </header>
+
+  {{/* ── Mobile Menu Overlay ── */}}
+  <div id="mobile-menu" class="md:hidden fixed inset-0 z-40 hidden menu-overlay">
+    <div class="absolute inset-0 bg-black/30" onclick="closeMobileMenu()"></div>
+    <div class="absolute top-0 left-0 right-0 bg-white shadow-lg menu-panel max-h-[85vh] overflow-y-auto rounded-b-2xl">
+      <nav class="px-4 py-4 space-y-0.5">
+        {{ range $nav }}
+        <div>
+          <a href="#{{ .id }}"
+             class="mobile-link font-medium flex items-center justify-between"
+             onclick="toggleMobileNav(this); event.preventDefault();">
+            <span>{{ .label }}</span>
+            {{ if .children }}
+            <svg class="chevron text-g-gray" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+            {{ end }}
+          </a>
+          {{ if .children }}
+          <div class="children-wrap pl-2">
+            {{ range .children }}
+            <a href="#{{ .id }}" class="mobile-sub" onclick="closeMobileMenu()">{{ .label }}</a>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+        <div class="pt-3 mt-3 border-t border-g-border">
+          {{ if eq $lang "ko" }}
+          <a href="/en/" class="mobile-link text-g-gray">English</a>
+          {{ else }}
+          <a href="/" class="mobile-link text-g-gray">한국어</a>
+          {{ end }}
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  {{/* ── Main Content ── */}}
+  <main id="main-content" class="md:ml-52 min-h-screen">
+    <div class="max-w-4xl mx-auto px-6 md:px-10 py-6 md:py-8">
+      {{ block "main" . }}{{ end }}
+    </div>
+  </main>
+
+  <footer class="md:ml-52 border-t border-g-border">
+    <div class="max-w-4xl mx-auto px-6 md:px-10 py-5 text-center text-[13px] text-g-gray">
+      <span>{{ replace .Site.Copyright "{year}" (now.Format "2006") }}</span>
+      <span class="mx-2">·</span>
+      <a href="https://www.flaticon.com/kr/free-icons/" title="아름다움 아이콘" target="_blank" rel="noopener" class="hover:text-g-dark transition-colors">Iconjam / Flaticon</a>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+
+      /* ── Sidebar scroll spy ── */
+      var sidebarLinks = document.querySelectorAll('#sidebar-nav .sidebar-link[data-section]');
+      var sections = [];
+      sidebarLinks.forEach(function(link) {
+        var id = link.getAttribute('data-section');
+        var el = document.getElementById(id);
+        if (el) sections.push({ el: el, link: link, id: id });
+      });
+
+      if (sections.length > 0) {
+        var observer = new IntersectionObserver(function(entries) {
+          var best = null;
+          entries.forEach(function(entry) {
+            if (entry.intersectionRatio > 0) {
+              if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+            }
+          });
+          if (best) {
+            sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
+            var active = document.querySelector('#sidebar-nav .sidebar-link[data-section="' + best.target.id + '"]');
+            if (active) active.classList.add('active');
+          }
+        }, { threshold: [0.2, 0.3, 0.4, 0.5, 0.6] });
+        sections.forEach(function(s) { observer.observe(s.el); });
+      }
+
+      /* ── Mobile header shadow ── */
+      var hdr = document.getElementById('mobile-header');
+      window.addEventListener('scroll', function() {
+        hdr.classList.toggle('nav-shadow', window.scrollY > 0);
+      }, { passive: true });
+
+      /* ── Hamburger ── */
+      window.openMobileMenu = function() {
+        document.getElementById('mobile-menu').classList.remove('hidden');
+        document.getElementById('hamburger-icon').classList.add('hidden');
+        document.getElementById('close-icon').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      };
+      window.closeMobileMenu = function() {
+        document.getElementById('mobile-menu').classList.add('hidden');
+        document.getElementById('hamburger-icon').classList.remove('hidden');
+        document.getElementById('close-icon').classList.add('hidden');
+        document.body.style.overflow = '';
+      };
+      document.getElementById('hamburger-btn').addEventListener('click', function() {
+        var menu = document.getElementById('mobile-menu');
+        if (menu.classList.contains('hidden')) openMobileMenu();
+        else closeMobileMenu();
+      });
+
+      /* ── Accordion toggle (sidebar) ── */
+      window.toggleNav = function(el) {
+        var wrap = el.nextElementSibling;
+        if (!wrap || !wrap.classList.contains('children-wrap')) return;
+        var chevron = el.querySelector('.chevron');
+        wrap.classList.toggle('open');
+        if (chevron) chevron.classList.toggle('open');
+      };
+
+      /* ── Accordion toggle (mobile) ── */
+      window.toggleMobileNav = function(el) {
+        var wrap = el.nextElementSibling;
+        if (!wrap || !wrap.classList.contains('children-wrap')) return;
+        var chevron = el.querySelector('.chevron');
+        wrap.classList.toggle('open');
+        if (chevron) chevron.classList.toggle('open');
+        /* also scroll to section */
+        var href = el.getAttribute('href');
+        if (href) {
+          setTimeout(function() {
+            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+          }, 150);
+        }
+      };
+
+      /* ── Close mobile menu on sub-link click ── */
+      document.querySelectorAll('#mobile-menu .mobile-sub, #mobile-menu .mobile-link:not([onclick])').forEach(function(link) {
+        link.addEventListener('click', closeMobileMenu);
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

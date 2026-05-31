@@ -1,0 +1,224 @@
+profile:
+  name:
+    ko: "황수빈"
+    en: "Subhin Hwang"
+  affiliation:
+    ko: "수학교사이자 연구자. 통계교육, 데이터 리터러시, AI를 활용한 수학 교육을 연구하고 있습니다."
+    en: "Math teacher & researcher interested in statistics education, data literacy, and AI in mathematics."
+  keywords:
+    ko: ["통계교육", "데이터 시각화", "AI 평가", "데이터 리터러시"]
+    en: ["Statistics Education", "Data Visualization", "AI in Assessment", "Data Literacy"]
+  avatar: "images/avatar.jpg"
+  google_scholar: "https://scholar.google.com/citations?user=iejz9ggAAAAJ&hl=ko"
+
+  # 소셜 링크 · 빈 값("")은 표시되지 않음
+  social:
+    email: "sbhath17@gmail.com"
+    github: "https://github.com/Surihub"
+    youtube: "https://youtube.com/@soobcode"
+    linkedin: "https://www.linkedin.com/in/subhin-hwang/"      # 예: https://linkedin.com/in/username
+    blog: "https://surish.tistory.com/"          # 예: https://your-blog.com
+
+research_overview:
+  ko: "AI 기반 형성적 평가와 통계 교육용 인터랙티브 도구 개발, 데이터 리터러시 및 통계적 추론 향상에 관심을 두고 연구하고 있습니다."
+  en: "Focusing on AI-driven formative assessment in mathematics, development of interactive visualization tools for statistics education, and data literacy across learners."
+
+books:
+  - title:
+      ko: "선생님을 위한 8282 업무 자동화 with AI+파이썬+노코드"
+      en: "8282 Work Automation for Teachers with AI+Python+No-code"
+    publisher: "골든래빗"
+    year: "2025"
+    isbn: ""
+    url: "https://www.yes24.com/product/goods/143533211"
+  - title:
+      ko: "최소한의 데이터 리터러시"
+      en: "Minimum Data Literacy"
+    publisher: "길벗"
+    year: "2024"
+    isbn: ""
+    url: "https://www.yes24.com/product/goods/125014012"
+  - title:
+      ko: "수학이 빛나는 순간"
+      en: "The Moment Mathematics Shines"
+    publisher: "길벗스쿨"
+    year: "2025"
+    isbn: ""
+    url: "https://www.yes24.com/product/goods/159359607"
+  - title:
+      ko: "온라인 수업으로 항해하다"
+      en: "Sailing into Online Classes"
+    publisher: "교육과학사"
+    year: "2021"
+    isbn: ""
+    url: "https://www.yes24.com/product/goods/97297875"
+
+textbooks:
+  - title:
+      ko: "2022 개정 교육과정 수학과 <실용통계> 교과서"
+      en: "2022 Revised Mathematics Curriculum <Practical Statistics> Textbook"
+    publisher: "천재교육"
+    year: "2025"
+    isbn: ""
+    url: ""
+
+education:
+  ko:
+    - period: "2023.2~"
+      title: "서울대학교 대학원 수학교육과 박사 과정"
+      description: "수학교육학 전공"
+      url: ""
+    - period: "2020.3~2022.2"
+      title: "서울대학교 대학원 수학교육과 석사"
+      description: "수학교육학 전공"
+      url: ""
+    - period: "2013.3~2017.2"
+      title: "서강대학교 수학과 학사"
+      description: ""
+      url: ""
+  en:
+    - period: "2023.2~"
+      title: "Ph.D. Candidate (ABD), Seoul National University"
+      description: "Mathematics Education"
+      url: ""
+    - period: "2020.3~2022.2"
+      title: "M.Ed., Seoul National University"
+      description: "Mathematics Education"
+      url: ""
+    - period: "2013.3~2017.2"
+      title: "B.A. in Mathematics, Sogang University"
+      description: ""
+      url: ""
+
+certifications:
+  - name: "ADsP (데이터분석준전문가)"
+    issuer: "한국데이터산업진흥원"
+    year: "2022"
+    url: ""
+
+skills:
+  - category: "Programming"
+    items: ["Python (pandas, Streamlit)", "R (IRT, ggplot2)", "Google Apps Script", "HTML/CSS/JS", "React", "Tailwind", "Next.js"]
+  - category: "Data Science"
+    items: ["Machine Learning", "Statistical Modeling"]
+  - category: "Educational Tools"
+    items: ["CODAP", "AI-based Assessment Tools"]
+
+experience:
+  ko:
+    - period: "2024~현재"
+      title: "반포고등학교 교사"
+      description: "수학교사로 재직 중"
+      url: ""
+    - period: "2018~2023"
+      title: "대청중학교 교사"
+      description: "수학교사로 재직"
+      url: ""
+    - period: "현재"
+      title: "전국통계교육교사모임 분과장"
+      description: "코딩 교사 커뮤니티 및 통계 교육 관련 활동"
+      links:
+        - text: "전국통계교육교사모임"
+          url: "http://www.edustat.or.kr/"
+      url: ""
+    - period: "현재"
+      title: "쪼랩(Zzolab) 운영위원"
+      description: "코딩 교사 커뮤니티 및 통계 교육 관련 활동"
+      links:
+        - text: "쪼랩(Zzolab)"
+          url: "https://huggingface.co/zzolab"
+      url: ""
+ 
+  en:
+    - period: "2024~Present"
+      title: "Mathematics Teacher, Banpo High School"
+      description: "Serving as a secondary school mathematics teacher"
+      url: ""
+    - period: "2018~2023"
+      title: "Mathematics Teacher, Deacheong Middle School"
+      description: "Served as a middle school mathematics teacher"
+      url: ""
+    - period: "Present"
+      title: "Division Chair, National Statistics Education Teachers' Association / Steering Committee Member, Zzolab"
+      description: "Active in coding teachers' community and statistics education"
+      links:
+        - text: "Statistics Education Teachers' Association"
+          url: "http://www.edustat.or.kr/"
+        - text: "Zzolab"
+          url: "https://zzolab.com/"
+
+publications:
+  - title: "Analysis of AI and student feedback characteristics and satisfaction in mathematics classes utilizing AI-based Formative Peer Assessment"
+    authors: ["Hwang, S. B.", "Shin, I.", "Yoo, Y. J.", "Bae, S."]
+    journal: "Journal of School Mathematics"
+    year: "2025"
+    doi: ""
+    url: ""
+    abstract:
+      ko: "AI 기반 형성적 동료 평가를 활용한 수학 수업에서의 AI 및 학생 피드백 특성과 만족도 분석"
+      en: ""
+  - title: "Comparing Student Preferences for AI-Generated and Peer-Generated Feedback in AI-driven Formative Peer Assessment"
+    authors: ["Shin, I.", "Hwang, S. B.", "Yoo, Y. J.", "Bae, S.", "Kim, R. Y."]
+    journal: "LAK25 (Proceedings of the 15th International Learning Analytics and Knowledge Conference)"
+    year: "2025"
+    doi: ""
+    url: ""
+    abstract:
+      ko: "AI 기반 형성적 동료 평가에서 AI 생성 피드백과 동료 생성 피드백에 대한 학생 선호도 비교"
+      en: ""
+  - title: "A study on the application of M2PL-Q model for analyzing assessment data considering both content and cognitive domains: An analysis of TIMSS 2019 mathematics data"
+    authors: ["Kim, R. Y.", "Hwang, S. B.", "Lee, S. G.", "Yoo, Y. J."]
+    journal: "Communications of Mathematical Education, 38(3), 379–400"
+    year: "2024"
+    doi: ""
+    url: ""
+    abstract:
+      ko: ""
+      en: ""
+  - title: "Predicting Student Responses to Math Items Using Machine Learning"
+    authors: ["Hwang, S. B."]
+    journal: "Master's thesis, Seoul National University"
+    year: "2022"
+    doi: ""
+    url: ""
+    abstract:
+      ko: ""
+      en: ""
+
+talks:
+  - title:
+      ko: "파이썬을 활용한 교사 업무 자동화"
+      en: "Automating Teachers' Workflows with Python"
+    event: "PyCon Korea 2023"
+    date: "2023"
+    location: "South Korea"
+    url: "https://2023.pycon.kr/session/40"
+  - title:
+      ko: "Streamlit과 Google Sheets를 활용한 LLM 기반 웹 서비스 구축"
+      en: "Building LLM-powered Web Services with Streamlit & Google Sheets"
+    event: "PyCon Korea 2025"
+    date: "2025"
+    location: "South Korea"
+    url: "https://2025.pycon.kr/presentations/93f0616a-9975-4b49-bf9d-3336acbec57e#Streamlit%EA%B3%BC-Google-Sheets%EB%A1%9C-%EB%A7%8C%EB%93%9C%EB%8A%94-%EC%96%91%EB%B0%A9%ED%96%A5-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9B%B9%EC%95%B1"
+
+projects:
+  - title: "Plotifai"
+    description:
+      ko: "학생들과 테스트한 프로토타입 인터랙티브 시각화 도구; 통계적 탐구에서 탐색적 도구의 필요성 확인"
+      en: "Prototype interactive visualization tool tested with students; revealed need for exploratory, interactive tools in statistical inquiry."
+    url: "https://joo.is/plotifai"
+    status: "Completed/Prototype"
+  - title: "AI-based Student Record Assistant"
+    description:
+      ko: "고등학교 생활기록부 작성을 위한 Google Apps Script + GPT API 자동화 도구"
+      en: "Google Apps Script + GPT API for automated narrative feedback in high schools."
+    url: ""
+    status: "Active"
+  - title: "Streamlit Apps for Statistics Education"
+    description:
+      ko: "확률 시뮬레이션, 그래프 추천, AI 기반 피드백을 제공하는 통계 교육용 앱"
+      en: "Probability simulations, graph recommendation, AI-enhanced feedback for students."
+    url: ""
+    status: "Active"
+
+awards: []

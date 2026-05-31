@@ -1,0 +1,42 @@
+main_menu:
+  enable: true
+
+theme: minimal
+
+avatar:
+  shape: circle
+  round: true
+
+search:
+  provider: wowchemy
+
+features:
+  syntax_highlighter:
+    enable: false
+
+sharing: true
+
+i_am_sponsor: false
+
+copyright:
+  notice: "© {year} Subhin Hwang. All rights reserved."
+
+locale:
+  date_format: "Jan 2, 2006"
+  time_format: "3:04 PM"
+
+header:
+  navbar:
+    enable: true
+    align: center
+    show_logo: true
+    show_language: true
+    show_day_night: true
+    show_search: true
+    highlight_active_link: true
+
+footer:
+  copyright:
+    notice: "© {year} Subhin Hwang"
+    license:
+      enable: false

@@ -1,0 +1,169 @@
+{{ $section := .Get 0 }}
+{{ $lang := .Page.Language.Lang }}
+{{ $data := index hugo.Data.author $section }}
+
+{{ if eq $section "education" }}
+{{ $items := index $data $lang }}
+<div class="space-y-4">
+  {{ range $i, $item := $items }}
+  <div>
+    <div class="flex items-baseline gap-2 flex-wrap">
+      <span class="text-[14px] font-medium text-g-dark leading-snug">{{ .title }}</span>
+      <span class="text-[11px] text-g-gray/50 whitespace-nowrap">{{ .period }}</span>
+    </div>
+    {{ if .description }}
+    <div class="text-[13px] text-g-gray mt-0.5 leading-relaxed">{{ .description }}</div>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "experience" }}
+{{ $items := index $data $lang }}
+<div class="space-y-4">
+  {{ range $i, $item := $items }}
+  <div>
+    <div class="flex items-baseline gap-2 flex-wrap">
+      <span class="text-[14px] font-medium text-g-dark leading-snug">{{ .title }}</span>
+      <span class="text-[11px] text-g-gray/50 whitespace-nowrap">{{ .period }}</span>
+    </div>
+    {{ if .description }}
+    <div class="text-[13px] text-g-gray mt-0.5 leading-relaxed">{{ .description }}</div>
+    {{ end }}
+    {{ if .links }}
+    <div class="flex flex-wrap gap-3 mt-1">
+      {{ range .links }}
+      <a href="{{ .url }}" target="_blank" rel="noopener"
+         class="text-[12px] font-medium text-g-blue hover:underline transition-all">{{ .text }}</a>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "publications" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}학술 논문{{ else }}Journal Papers{{ end }}</h2>
+</div>
+<div class="space-y-4">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "https://google.com" }}
+  <div>
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ .title }}</a>
+    <div class="text-[12px] text-g-gray mt-0.5 leading-relaxed">
+      {{ delimit .authors ", " }} ({{ .year }})
+      <span class="italic">{{ .journal }}</span>
+    </div>
+    <div class="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+      {{ if .doi }}
+      <a href="https://doi.org/{{ .doi }}" target="_blank" rel="noopener"
+         class="text-[12px] font-medium text-g-blue/70 hover:text-g-blue transition-colors">DOI</a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "books" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}저서{{ else }}Books{{ end }}</h2>
+</div>
+<div class="space-y-3">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "https://google.com" }}
+  <div>
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ index .title $lang }}</a>
+    <span class="text-[12px] text-g-gray">{{ .publisher }}, {{ .year }}</span>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "textbooks" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}교과서{{ else }}Textbook{{ end }}</h2>
+</div>
+<div class="space-y-3">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "https://google.com" }}
+  <div>
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ index .title $lang }}</a>
+    <span class="text-[12px] text-g-gray">{{ .publisher }}, {{ .year }}</span>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "skills" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}기술{{ else }}Skills{{ end }}</h2>
+</div>
+<div class="space-y-4">
+  {{ range $data }}
+  <div>
+    <span class="text-[13px] font-semibold text-g-dark/70">{{ .category }}</span>
+    <div class="flex flex-wrap gap-2 mt-2">
+      {{ range .items }}
+      <span class="skill-chip">{{ . }}</span>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "certifications" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}자격증{{ else }}Certifications{{ end }}</h2>
+</div>
+<div class="space-y-2">
+  {{ range $data }}
+  <div class="flex items-baseline gap-2 flex-wrap">
+    <span class="text-[14px] font-medium text-g-dark leading-snug">{{ .name }}</span>
+    <span class="text-[12px] text-g-gray">{{ .issuer }}, {{ .year }}</span>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "talks" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}발표{{ else }}Talks{{ end }}</h2>
+</div>
+<div class="space-y-3">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "" }}
+  <div>
+    {{ if $link }}
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ index .title $lang }}</a>
+    {{ else }}
+    <span class="text-[14px] font-medium text-g-dark leading-snug">{{ index .title $lang }}</span>
+    {{ end }}
+    <div class="text-[12px] text-g-gray mt-0.5">
+      {{ .event }} · {{ .date }}{{ if .location }}, {{ .location }}{{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+
+{{ else if eq $section "projects" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}프로젝트{{ else }}Projects{{ end }}</h2>
+</div>
+<div class="space-y-3">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "" }}
+  <div>
+    {{ if $link }}
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ .title }}</a>
+    {{ else }}
+    <span class="text-[14px] font-medium text-g-dark leading-snug">{{ .title }}</span>
+    {{ end }}
+    <div class="text-[12px] text-g-gray mt-0.5 leading-relaxed">{{ index .description $lang }}</div>
+    {{ if .status }}<span class="inline-block text-[11px] font-medium text-g-blue/70 mt-0.5">{{ .status }}</span>{{ end }}
+  </div>
+  {{ end }}
+</div>
+{{ end }}
