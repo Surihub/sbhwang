@@ -118,12 +118,35 @@
     .hero-item:nth-child(5) { animation-delay: 0.33s; }
 
     .section-card {
-      padding: 0.875rem 0.75rem; margin-bottom: 0.875rem;
-      border-left: 3px solid #dadce0; border-radius: 0 0.5rem 0.5rem 0;
-      transition: border-color 0.2s;
+      padding: 1rem 0; margin-bottom: 0.25rem;
     }
-    .section-card:hover { border-left-color: #1a73e8; }
-    @media (min-width: 768px) { .section-card { padding: 1rem 1.25rem; } }
+    .section-card + .section-card {
+      border-top: 1px solid #f1f3f4;
+    }
+    @media (min-width: 768px) { .section-card { padding: 1.25rem 0; } }
+
+    #scroll-crumb {
+      position: sticky; top: 0; z-index: 20;
+      margin: 0 -1.5rem 1.25rem;
+      padding: 0 1.5rem;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(218,220,224,0.45);
+      height: 0; overflow: hidden;
+      transition: height 0.2s ease;
+    }
+    #scroll-crumb.visible { height: 36px; }
+    #scroll-crumb-inner {
+      display: flex; align-items: center; height: 36px;
+    }
+    #scroll-crumb-text {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+      text-transform: uppercase; color: #9aa0a6;
+    }
+    @media (min-width: 768px) {
+      #scroll-crumb { margin: 0 -2.5rem 1.5rem; padding: 0 2.5rem; }
+    }
   </style>
 </head>
 
@@ -144,8 +167,7 @@
       (dict "id" "books" "label" "저서")
       (dict "id" "textbook" "label" "교과서")))
     (dict "id" "activities" "label" "활동" "children" (slice
-      (dict "id" "talks" "label" "발표")
-      (dict "id" "projects" "label" "프로젝트"))))
+      (dict "id" "talks" "label" "발표 및 강의"))))
   (slice
     (dict "id" "about" "label" "About")
     (dict "id" "career" "label" "Career" "children" (slice
@@ -158,8 +180,7 @@
       (dict "id" "books" "label" "Books")
       (dict "id" "textbook" "label" "Textbook")))
     (dict "id" "activities" "label" "Activities" "children" (slice
-      (dict "id" "talks" "label" "Talks")
-      (dict "id" "projects" "label" "Projects"))))
+      (dict "id" "talks" "label" "Talks & Lectures"))))
   }}
 
   {{/* ── Desktop Sidebar ── */}}
@@ -194,7 +215,7 @@
       {{ if eq $lang "ko" }}
       <a href="/en/" class="font-medium text-g-gray hover:text-g-dark transition-colors">English</a>
       {{ else }}
-      <a href="/" class="font-medium text-g-gray hover:text-g-dark transition-colors">한국어</a>
+      <a href="/" class="font-medium text-g-gray hover:text-g-dark transition-colors">Korean</a>
       {{ end }}
     </div>
   </aside>
@@ -238,7 +259,7 @@
           {{ if eq $lang "ko" }}
           <a href="/en/" class="mobile-link text-g-gray">English</a>
           {{ else }}
-          <a href="/" class="mobile-link text-g-gray">한국어</a>
+          <a href="/" class="mobile-link text-g-gray">Korean</a>
           {{ end }}
         </div>
       </nav>
@@ -248,6 +269,11 @@
   {{/* ── Main Content ── */}}
   <main id="main-content" class="md:ml-52 min-h-screen">
     <div class="max-w-4xl mx-auto px-6 md:px-10 py-6 md:py-8">
+      <div id="scroll-crumb" aria-hidden="true">
+        <div id="scroll-crumb-inner">
+          <span id="scroll-crumb-text"></span>
+        </div>
+      </div>
       {{ block "main" . }}{{ end }}
     </div>
   </main>
@@ -263,8 +289,10 @@
   <script>
     (function() {
 
-      /* ── Sidebar scroll spy ── */
+      /* ── Sidebar scroll spy + section crumb ── */
       var sidebarLinks = document.querySelectorAll('#sidebar-nav .sidebar-link[data-section]');
+      var crumb = document.getElementById('scroll-crumb');
+      var crumbText = document.getElementById('scroll-crumb-text');
       var sections = [];
       sidebarLinks.forEach(function(link) {
         var id = link.getAttribute('data-section');
@@ -283,9 +311,18 @@
           if (best) {
             sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
             var active = document.querySelector('#sidebar-nav .sidebar-link[data-section="' + best.target.id + '"]');
-            if (active) active.classList.add('active');
+            if (active) {
+              active.classList.add('active');
+              var label = active.querySelector('span') ? active.querySelector('span').textContent : '';
+              if (best.target.id === 'about') {
+                crumb.classList.remove('visible');
+              } else {
+                crumbText.textContent = label;
+                crumb.classList.add('visible');
+              }
+            }
           }
-        }, { threshold: [0.2, 0.3, 0.4, 0.5, 0.6] });
+        }, { threshold: [0.05, 0.2, 0.3, 0.4, 0.5] });
         sections.forEach(function(s) { observer.observe(s.el); });
       }
 

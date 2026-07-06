@@ -272,8 +272,8 @@
       <div style="margin-top:1rem; font-size:0.8em;">
         <div style="font-size:0.75em; font-weight:600; color:#5f6368; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Certifications</div>
         {{ range $author.certifications }}
-        <span style="color:#202124; font-weight:500;">{{ .name }}</span>
-        <span style="color:#5f6368;">{{ .issuer }}, {{ .year }}</span>
+        <span style="color:#202124; font-weight:500;">{{ index .name $lang }}</span>
+        <span style="color:#5f6368;">{{ index .issuer $lang }}, {{ .year }}</span>
         {{ end }}
       </div>
       {{ end }}

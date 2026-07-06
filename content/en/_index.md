@@ -1,3 +1,3 @@
 ---
-title: "Subhin Hwang"
+title: "Su Bhin Hwang"
 ---

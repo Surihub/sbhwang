@@ -1,7 +1,7 @@
 baseURL: https://sbhwang.vercel.app
-copyright: "© {year} Subhin Hwang"
+copyright: "© {year} Su Bhin Hwang"
 
-defaultContentLanguage: ko
+defaultContentLanguage: en
 defaultContentLanguageInSubdir: false
 
 enableRobotsTXT: true

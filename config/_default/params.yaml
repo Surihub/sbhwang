@@ -19,7 +19,7 @@ sharing: true
 i_am_sponsor: false
 
 copyright:
-  notice: "© {year} Subhin Hwang. All rights reserved."
+  notice: "© {year} Su Bhin Hwang. All rights reserved."
 
 locale:
   date_format: "Jan 2, 2006"
@@ -37,6 +37,6 @@ header:
 
 footer:
   copyright:
-    notice: "© {year} Subhin Hwang"
+    notice: "© {year} Su Bhin Hwang"
     license:
       enable: false

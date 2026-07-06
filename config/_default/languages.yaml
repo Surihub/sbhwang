@@ -1,7 +1,7 @@
 ko:
   locale: ko-KR
   label: 한국어
-  weight: 1
+  weight: 2
   title: "황수빈"
   contentDir: content/ko
   params:
@@ -9,31 +9,31 @@ ko:
   menus:
     main:
       - name: "홈"
-        url: "/"
+        url: "/ko/"
         weight: 10
       - name: "논문"
-        url: "/publication/"
+        url: "/ko/publication/"
         weight: 20
       - name: "활동"
-        url: "/activities/"
+        url: "/ko/activities/"
         weight: 30
 
 en:
   locale: en-US
   label: English
-  weight: 2
-  title: "Subhin Hwang"
+  weight: 1
+  title: "Su Bhin Hwang"
   contentDir: content/en
   params:
     subtitle: "Ph.D. Candidate at SNU / Math Teacher at Banpo High School"
   menus:
     main:
       - name: "Home"
-        url: "/en/"
+        url: "/"
         weight: 10
       - name: "Publications"
-        url: "/en/publication/"
+        url: "/publication/"
         weight: 20
       - name: "Activities"
-        url: "/en/activities/"
+        url: "/activities/"
         weight: 30
