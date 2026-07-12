@@ -3,7 +3,7 @@ profile:
     ko: "황수빈"
     en: "Su Bhin Hwang"
   affiliation:
-    ko: "수학교사이자 연구자. 통계교육, 데이터 리터러시, \nAI를 활용한 수학 교육을 연구하고 있습니다."
+    ko: "수학교사이자 연구자로, 통계교육, 데이터 리터러시, AI를 활용한 수학 교육을 연구하고 있습니다."
     en: "Math teacher & researcher interested in statistics education, data literacy, and AI in mathematics."
   keywords:
     ko: ["통계교육", "데이터 시각화", "AI 평가", "데이터 리터러시"]
@@ -141,20 +141,26 @@ experience:
   en:
     - period: "2024~Present"
       title: "Mathematics Teacher, Banpo High School"
-      description: "Serving as a secondary school mathematics teacher"
+      description: "High school mathematics teacher"
       url: ""
     - period: "2018~2023"
-      title: "Mathematics Teacher, Deacheong Middle School"
-      description: "Served as a middle school mathematics teacher"
+      title: "Mathematics Teacher, Daecheong Middle School"
+      description: "Middle school mathematics teacher"
       url: ""
     - period: "Present"
-      title: "Division Chair, National Statistics Education Teachers' Association / Steering Committee Member, Zzolab"
-      description: "Active in coding teachers' community and statistics education"
+      title: "Section Lead, Edustat Teachers Group"
+      description: "Statistics education network"
       links:
-        - text: "Statistics Education Teachers' Association"
+        - text: "edustat.or.kr"
           url: "http://www.edustat.or.kr/"
+      url: ""
+    - period: "Present"
+      title: "Zzolab Steering Committee"
+      description: "Coding teacher community"
+      links:
         - text: "Zzolab"
-          url: "https://zzolab.com/"
+          url: "https://huggingface.co/zzolab"
+      url: ""
 
 publications:
   - title: "Analysis of AI and student feedback characteristics and satisfaction in mathematics classes utilizing AI-based Formative Peer Assessment"

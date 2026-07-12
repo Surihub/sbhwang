@@ -213,9 +213,9 @@
     </nav>
     <div class="px-6 py-5 border-t border-g-border text-[13px]">
       {{ if eq $lang "ko" }}
-      <a href="/en/" class="font-medium text-g-gray hover:text-g-dark transition-colors">English</a>
+      <a href="{{ "" | relURL }}" class="font-medium text-g-gray hover:text-g-dark transition-colors">English</a>
       {{ else }}
-      <a href="/" class="font-medium text-g-gray hover:text-g-dark transition-colors">Korean</a>
+      <a href="{{ "ko/" | relURL }}" class="font-medium text-g-gray hover:text-g-dark transition-colors">Korean</a>
       {{ end }}
     </div>
   </aside>
@@ -257,9 +257,9 @@
         {{ end }}
         <div class="pt-3 mt-3 border-t border-g-border">
           {{ if eq $lang "ko" }}
-          <a href="/en/" class="mobile-link text-g-gray">English</a>
+          <a href="{{ "" | relURL }}" class="mobile-link text-g-gray">English</a>
           {{ else }}
-          <a href="/" class="mobile-link text-g-gray">Korean</a>
+          <a href="{{ "ko/" | relURL }}" class="mobile-link text-g-gray">Korean</a>
           {{ end }}
         </div>
       </nav>
@@ -281,8 +281,6 @@
   <footer class="md:ml-52 border-t border-g-border">
     <div class="max-w-4xl mx-auto px-6 md:px-10 py-5 text-center text-[13px] text-g-gray">
       <span>{{ replace .Site.Copyright "{year}" (now.Format "2006") }}</span>
-      <span class="mx-2">·</span>
-      <a href="https://www.flaticon.com/kr/free-icons/" title="아름다움 아이콘" target="_blank" rel="noopener" class="hover:text-g-dark transition-colors">Iconjam / Flaticon</a>
     </div>
   </footer>
 
