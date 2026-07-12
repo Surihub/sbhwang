@@ -65,7 +65,7 @@ textbooks:
     publisher: "천재교육"
     year: "2025"
     isbn: ""
-    url: ""
+    url: "https://text.tsherpa.co.kr/high/book.html?bookcode=text-high-math-40-ma-02"
 
 education:
   ko:
@@ -163,6 +163,15 @@ experience:
       url: ""
 
 publications:
+  - title: "Analyzing middle school students' statistical inquiry processes using AI-generated feedback: A learning analytics approach based on web log data"
+    authors: ["Hwang, S. B.", "Lee, K. H.", "Shin, D. J.", "Yoo, Y. J.", "Park, J. H."]
+    journal: "Journal of the Korean School Mathematics Society, 39(4), 707-727"
+    year: "2025"
+    doi: "10.7468/jksmee.2025.39.4.707"
+    url: "https://doi.org/10.7468/jksmee.2025.39.4.707"
+    abstract:
+      ko: "AI 피드백을 활용한 중학생의 통계적 탐구 과정 분석: 웹 로그 데이터 기반 학습 분석 관점을 중심으로"
+      en: ""
   - title: "Analysis of AI and student feedback characteristics and satisfaction in mathematics classes utilizing AI-based Formative Peer Assessment"
     authors: ["Hwang, S. B.", "Shin, I.", "Yoo, Y. J.", "Bae, S."]
     journal: "Journal of School Mathematics"
