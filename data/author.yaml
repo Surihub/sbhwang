@@ -216,6 +216,15 @@ talks:
     location: "South Korea"
     url: "https://2025.pycon.kr/presentations/93f0616a-9975-4b49-bf9d-3336acbec57e#Streamlit%EA%B3%BC-Google-Sheets%EB%A1%9C-%EB%A7%8C%EB%93%9C%EB%8A%94-%EC%96%91%EB%B0%A9%ED%96%A5-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%9B%B9%EC%95%B1"
 
+other_activities:
+  - title:
+      ko: "Meetup & Practitioner Engagement Chair"
+      en: "Meetup & Practitioner Engagement Chair"
+    event: "Festival of Learning"
+    date: "2026"
+    location: ""
+    url: ""
+
 projects:
   - title: "Plotifai"
     description:

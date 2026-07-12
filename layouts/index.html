@@ -220,6 +220,24 @@
     </div>
   </div>
 
+  <div id="other-activities" class="section-card">
+    <h3 class="text-[13px] font-semibold text-g-dark/50 tracking-wide mb-3">{{ if eq $lang "ko" }}기타{{ else }}Other{{ end }}</h3>
+    <div class="space-y-2">
+      {{ range $author.other_activities }}
+      {{ $title := index .title $lang }}
+      {{ $link := .url }}
+      <div>
+        {{ if $link }}
+        <a href="{{ $link }}" target="_blank" rel="noopener" class="text-[15px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ $title }}</a>
+        {{ else }}
+        <span class="text-[15px] font-medium text-g-dark leading-snug">{{ $title }}</span>
+        {{ end }}
+        <div class="text-[13px] text-g-gray mt-0.5">{{ .event }} · {{ .date }}{{ if .location }}, {{ .location }}{{ end }}</div>
+      </div>
+      {{ end }}
+    </div>
+  </div>
+
 </section>
 
 {{ end }}

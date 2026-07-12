@@ -147,6 +147,27 @@
   {{ end }}
 </div>
 
+{{ else if eq $section "other_activities" }}
+<div class="mb-5 pb-2 border-b border-g-border/30">
+  <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}기타{{ else }}Other{{ end }}</h2>
+</div>
+<div class="space-y-3">
+  {{ range $i, $item := $data }}
+  {{ $link := or .url "" }}
+  <div>
+    {{ if $link }}
+    <a href="{{ $link }}" target="_blank" rel="noopener"
+       class="text-[14px] font-medium text-g-dark hover:text-g-blue transition-colors leading-snug">{{ index .title $lang }}</a>
+    {{ else }}
+    <span class="text-[14px] font-medium text-g-dark leading-snug">{{ index .title $lang }}</span>
+    {{ end }}
+    <div class="text-[12px] text-g-gray mt-0.5">
+      {{ .event }} · {{ .date }}{{ if .location }}, {{ .location }}{{ end }}
+    </div>
+  </div>
+  {{ end }}
+</div>
+
 {{ else if eq $section "projects" }}
 <div class="mb-5 pb-2 border-b border-g-border/30">
   <h2 class="text-[13px] font-semibold text-g-dark/60 tracking-wide">{{ if eq $lang "ko" }}프로젝트{{ else }}Projects{{ end }}</h2>

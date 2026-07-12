@@ -167,7 +167,8 @@
       (dict "id" "books" "label" "저서")
       (dict "id" "textbook" "label" "교과서")))
     (dict "id" "activities" "label" "활동" "children" (slice
-      (dict "id" "talks" "label" "발표 및 강의"))))
+      (dict "id" "talks" "label" "발표 및 강의")
+      (dict "id" "other-activities" "label" "기타"))))
   (slice
     (dict "id" "about" "label" "About")
     (dict "id" "career" "label" "Career" "children" (slice
@@ -180,7 +181,8 @@
       (dict "id" "books" "label" "Books")
       (dict "id" "textbook" "label" "Textbook")))
     (dict "id" "activities" "label" "Activities" "children" (slice
-      (dict "id" "talks" "label" "Talks & Lectures"))))
+      (dict "id" "talks" "label" "Talks & Lectures")
+      (dict "id" "other-activities" "label" "Other"))))
   }}
 
   {{/* ── Desktop Sidebar ── */}}
@@ -222,12 +224,12 @@
 
   {{/* ── Mobile Header ── */}}
   <header id="mobile-header" class="md:hidden sticky top-0 z-50 bg-white border-b border-g-border transition-shadow duration-200">
-    <div class="max-w-5xl mx-auto px-6 h-[60px] flex items-center justify-between">
-      <a href="#about" class="text-[17px] font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
-      <button id="hamburger-btn" class="p-2 -mr-2 text-g-gray hover:text-g-dark transition-colors" aria-label="Menu">
+    <div class="max-w-5xl mx-auto px-6 h-[60px] flex items-center gap-2">
+      <button id="hamburger-btn" class="p-2 -ml-2 text-g-gray hover:text-g-dark transition-colors" aria-label="Menu">
         <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
+      <a href="#about" class="text-[17px] font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
     </div>
   </header>
 
