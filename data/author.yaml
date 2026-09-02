@@ -18,7 +18,7 @@ profile:
     youtube: "https://youtube.com/@soobcode"
     linkedin: "https://www.linkedin.com/in/subhin-hwang/"      # 예: https://linkedin.com/in/username
     blog: ""          # 예: https://your-blog.com
-    naver_blog: "https://blog.naver.com/12myday"                                # 네이버 블로그 URL을 여기에 입력
+    naver_blog: ""                                # 네이버 블로그 URL을 여기에 입력
 
 research_overview:
   ko: "AI 기반 형성적 평가와 통계 교육용 인터랙티브 도구 개발, 데이터 리터러시 및 통계적 추론 향상에 관심을 두고 연구하고 있습니다."
@@ -69,7 +69,7 @@ textbooks:
 
 education:
   ko:
-    - period: "2023.2~"
+    - period: "2023.3~"
       title: "서울대학교 대학원 수학교육과 박사 과정"
       description: "수학교육학 전공"
       url: ""
@@ -82,7 +82,7 @@ education:
       description: ""
       url: ""
   en:
-    - period: "2023.2~"
+    - period: "2023.3~"
       title: "Ph.D. Student, Seoul National University"
       description: "Mathematics Education"
       url: ""
@@ -135,7 +135,7 @@ experience:
       description: "코딩 교사 커뮤니티 및 통계 교육 관련 활동"
       links:
         - text: "쪼랩(Zzolab)"
-          url: "https://huggingface.co/zzolab"
+          url: "https://zzolab.com"
       url: ""
  
   en:
@@ -211,15 +211,15 @@ publications:
 
 talks:
   - title:
-      ko: "파이썬을 활용한 교사 업무 자동화"
-      en: "Automating Teachers' Workflows with Python"
+      ko: "(발표)반복적인 일이 싫은 선생님의 Python을 활용한 학교에서의 업무자동화 사례"
+      en: "(Talk) School Workflow Automation with Python: A Case Study from a Teacher Who Hated Repetitive Work"
     event: "PyCon Korea 2023"
     date: "2023"
     location: "South Korea"
     url: "https://2023.pycon.kr/session/40"
   - title:
-      ko: "Streamlit과 Google Sheets를 활용한 LLM 기반 웹 서비스 구축"
-      en: "Building LLM-powered Web Services with Streamlit & Google Sheets"
+      ko: "(튜토리얼)Streamlit과 Google Sheets로 만드는 양방향 데이터 웹앱"
+      en: "(Tutorial) Building Interactive Data Web Apps with Streamlit and Google Sheets"
     event: "PyCon Korea 2025"
     date: "2025"
     location: "South Korea"
