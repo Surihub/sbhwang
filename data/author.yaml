@@ -26,6 +26,14 @@ research_overview:
 
 books:
   - title:
+      ko: "된다! 교사를 위한 AI 에듀테크 활용 백과"
+      en: "You Can Do It! The AI EdTech Encyclopedia for Teachers"
+    publisher: "이지스퍼블리싱"
+    year: "2026"
+    isbn: "9791163039181"
+    url: "https://www.yes24.com/product/goods/198327788"
+    coauthor: true
+  - title:
       ko: "수학이 빛나는 순간"
       en: "The Moment Mathematics Shines"
     publisher: "길벗스쿨"
@@ -123,14 +131,14 @@ experience:
       title: "대청중학교 교사"
       description: "수학교사로 근무"
       url: ""
-    - period: "현재"
+    - period: "2024~현재"
       title: "전국통계교육교사모임 분과장"
       description: "코딩 교사 커뮤니티 및 통계 교육 관련 활동"
       links:
         - text: "전국통계교육교사모임"
           url: "http://www.edustat.or.kr/"
       url: ""
-    - period: "현재"
+    - period: "2022~현재"
       title: "쪼랩(Zzolab) 운영위원"
       description: "코딩 교사 커뮤니티 및 통계 교육 관련 활동"
       links:
@@ -147,14 +155,14 @@ experience:
       title: "Mathematics Teacher, Daecheong Middle School"
       description: "Middle school mathematics teacher"
       url: ""
-    - period: "Present"
+    - period: "2024~Present"
       title: "Section Lead, Edustat Teachers Group"
       description: "Statistics education network"
       links:
         - text: "edustat.or.kr"
           url: "http://www.edustat.or.kr/"
       url: ""
-    - period: "Present"
+    - period: "2022~Present"
       title: "Zzolab Steering Committee"
       description: "Coding teacher community"
       links:
