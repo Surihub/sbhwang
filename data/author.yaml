@@ -3,11 +3,11 @@ profile:
     ko: "황수빈"
     en: "Su Bhin Hwang"
   affiliation:
-    ko: "수학교사이자 연구자로, 통계교육, 데이터 리터러시, AI를 활용한 수학 교육을 연구하고 있습니다."
-    en: "Math teacher & researcher interested in statistics education, data literacy, and AI in mathematics."
+    ko: "안녕하세요, 데이터와 AI가 학생의 배움을 어떻게 도울 수 있는지 탐구하는 고등학교 수학교사입니다. 통계교육과 데이터 리터러시, AI 기반 평가를 중심으로 수업과 연구를 하고 있습니다."
+    en: "Hello! I’m a high school mathematics teacher exploring how data and AI can support student learning. My teaching and research focus on statistics education, data literacy, and AI-supported assessment."
   keywords:
-    ko: ["통계교육", "데이터 시각화", "AI 평가", "데이터 리터러시"]
-    en: ["Statistics Education", "Data Visualization", "AI in Assessment", "Data Literacy"]
+    ko: ["수학교육", "통계교육", "데이터 시각화", "AI 평가", "데이터 리터러시"]
+    en: ["Mathematics Education", "Statistics Education", "Data Visualization", "AI in Assessment", "Data Literacy"]
   avatar: "images/avatar.jpg"
   google_scholar: "https://scholar.google.com/citations?user=iejz9ggAAAAJ&hl=ko"
 
@@ -163,7 +163,7 @@ experience:
           url: "http://www.edustat.or.kr/"
       url: ""
     - period: "2022~Present"
-      title: "Zzolab Steering Committee"
+      title: "Steering Committee Member, Zzolab"
       description: "Coding teacher community"
       links:
         - text: "Zzolab"

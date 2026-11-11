@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <link rel="icon" type="image/svg+xml" href="{{ "images/logo.svg" | relURL }}">
 
@@ -20,7 +20,7 @@
         extend: {
           fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
           colors: {
-            'g-blue':   '#1a73e8',
+            'g-blue':   '#30353a',
             'g-dark':   '#202124',
             'g-gray':   '#5f6368',
             'g-border': '#dadce0',
@@ -30,124 +30,68 @@
       }
     }
   </script>
-  <style>
-    html { scroll-behavior: smooth; }
-    body { -webkit-font-smoothing: antialiased; }
-
-    .nav-shadow { box-shadow: 0 1px 6px rgba(0,0,0,0.08); }
-
-    .sidebar-link {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0.5rem 0.75rem; border-radius: 0.375rem;
-      font-size: 0.875rem; font-weight: 500; color: #5f6368; cursor: pointer;
-      transition: all 0.15s; user-select: none;
+<style>
+    :root { --ink:#25282b; --heading:#1d3152; --heading-soft:#344b70; --muted:#606469; --line:#e5e5e5; --heading-line:#d9e0ea; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:#fff; -webkit-font-smoothing:antialiased; }
+    .masthead { position:sticky; top:0; z-index:50; border-bottom:1px solid var(--line); background:#fff; }
+    .masthead-inner { max-width:1200px; margin:0 auto; padding:24px 32px; display:flex; align-items:center; gap:48px; }
+    .site-name { font-size:20px; font-weight:700; white-space:nowrap; color:var(--heading); }
+    .site-nav { display:flex; align-items:center; gap:30px; margin-left:auto; }
+    .site-nav a { font-size:17px; color:#54585c; white-space:nowrap; padding:4px 0; }
+    .site-nav a:hover { color:#000; text-decoration:underline; text-underline-offset:7px; }
+    .site-nav .language-link { font-size:15px; padding-left:24px; border-left:1px solid var(--line); }
+    .academic-layout { display:grid; grid-template-columns:240px minmax(0,1fr); gap:64px; max-width:1200px; padding:48px 32px 64px; margin:0 auto; align-items:start; }
+    .author-sidebar { position:sticky; top:112px; min-width:0; }
+    .author-photo { width:170px; height:170px; border-radius:50%; object-fit:cover; padding:5px; border:1px solid #e9e9e9; background:#fff; }
+    .author-name { margin:20px 0 8px; font-size:24px; line-height:1.35; font-weight:700; color:var(--ink); }
+    .author-affiliation { font-size:15px; line-height:1.7; color:var(--muted); margin-bottom:20px; }
+    .profile-links { display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
+    .profile-links a { display:flex; align-items:center; gap:7px; padding:3px 0; margin:0; color:#45494d; background:none; }
+    .profile-links a:hover { color:#25282b; text-decoration:underline; text-underline-offset:3px; background:none; }
+    .profile-links a span { color:inherit; font-size:15px; overflow-wrap:anywhere; }
+    .social-btn { display:flex; align-items:center; justify-content:center; width:22px; height:24px; flex-shrink:0; }
+    .social-btn svg { width:17px; height:17px; }
+    #main-content { min-width:0; font-size:18px; line-height:1.8; }
+    main section, main .section-card { scroll-margin-top:112px; }
+    .page-heading { font-size:32px; font-weight:700; line-height:1.35; margin:0 0 24px; color:var(--heading); }
+    .introduction { font-size:18px; line-height:1.9; text-align:left; }
+    .introduction strong { font-weight:700; }
+    .research-topics { font-size:15px; line-height:1.9; color:var(--muted); margin-top:22px; }
+    .about-section { padding:0; margin-bottom:44px; }
+    .content-section { margin-bottom:44px; }
+    main section > h2 { font-size:26px; color:var(--heading); font-weight:700; border-bottom:1px solid var(--heading-line); padding-bottom:12px; margin-bottom:8px; }
+    .section-card { padding:22px 0; }
+    .section-card + .section-card { border-top:1px solid #eeeeee; }
+    main .section-card h3 { font-size:20px; color:var(--heading-soft); letter-spacing:0; margin-bottom:16px; }
+    main .section-card a { color:#30353a; text-decoration:underline; text-decoration-color:#bfc3c6; text-underline-offset:4px; }
+    main .section-card a:hover { color:#000; text-decoration-color:#25282b; }
+    .skill-chip { display:inline-block; padding:5px 14px; border-radius:999px; background:#f1f2f3; font-size:16px; line-height:1.6; color:#45494d; }
+    .site-footer { border-top:1px solid var(--line); color:#73777b; font-size:14px; padding:28px 32px; }
+    .site-footer > div { max-width:1136px; margin:auto; }
+    @media (max-width:900px) {
+      .academic-layout { grid-template-columns:200px minmax(0,1fr); gap:36px; padding:36px 24px; }
+      .masthead-inner { padding:20px 24px; gap:24px; }
+      .site-nav { gap:20px; }
+      .site-name { font-size:18px; }
     }
-    .sidebar-link:hover { color: #202124; background: #f1f3f4; }
-    .sidebar-link.active { color: #202124; font-weight: 600; background: transparent; }
-
-    .sub-link {
-      display: block; padding: 0.35rem 0.75rem 0.35rem 2rem; border-radius: 0.25rem;
-      font-size: 0.8125rem; font-weight: 400; color: #5f6368;
-      transition: all 0.15s;
+    @media (max-width:700px) {
+      .masthead-inner { display:block; padding:18px 20px 0; }
+      .site-nav { overflow-x:auto; gap:24px; padding:14px 0; }
+      .site-nav a { font-size:16px; }
+      .academic-layout { display:block; padding:28px 20px 40px; }
+      .author-sidebar { position:static; display:grid; grid-template-columns:100px minmax(0,1fr); column-gap:20px; margin-bottom:32px; padding-bottom:24px; border-bottom:1px solid var(--line); }
+      .author-photo { width:100px; height:100px; grid-row:1 / 3; }
+      .author-name { margin:10px 0 4px; font-size:23px; }
+      .author-affiliation { margin:0; font-size:14px; }
+      .profile-links { grid-column:1 / -1; flex-direction:row; flex-wrap:wrap; gap:8px 20px; margin-top:18px; }
+      .page-heading { font-size:28px; margin-bottom:18px; }
+      main section, main .section-card { scroll-margin-top:144px; }
+      .introduction { font-size:18px; }
+      main section > h2 { font-size:24px; }
     }
-    .sub-link:hover { color: #202124; background: #f1f3f4; }
-
-    .mobile-link {
-      display: block; padding: 0.75rem 1.25rem;
-      font-size: 1rem; font-weight: 500; color: #202124;
-      border-radius: 0.5rem; transition: background 0.15s;
-    }
-    .mobile-link:hover { background: #f1f3f4; }
-    .mobile-sub {
-      display: block; padding: 0.5rem 1.25rem 0.5rem 2.5rem;
-      font-size: 0.9375rem; font-weight: 400; color: #5f6368;
-      border-radius: 0.375rem; transition: background 0.15s;
-    }
-    .mobile-sub:hover { background: #f1f3f4; }
-
-    .chevron { transition: transform 0.2s; width: 16px; height: 16px; flex-shrink: 0; }
-    .chevron.open { transform: rotate(90deg); }
-
-    .children-wrap { overflow: hidden; max-height: 0; transition: max-height 0.25s ease; }
-    .children-wrap.open { max-height: 300px; }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    .menu-overlay { animation: fadeIn 0.15s ease; }
-    .menu-panel { animation: slideDown 0.2s ease; }
-
-    .social-btn {
-      display: flex; align-items: center; justify-content: center;
-      width: 2.25rem; height: 2.25rem; border-radius: 50%;
-      color: #5f6368; transition: all 0.2s;
-    }
-    .social-btn:hover { color: #202124; background: #f1f3f4; transform: scale(1.08); }
-
-    .keyword-chip {
-      padding: 0.5rem 1rem;
-      background: #f1f3f4; border-radius: 9999px;
-      font-size: 0.875rem; color: #202124; font-weight: 500;
-      transition: background 0.15s;
-    }
-    .keyword-chip:hover { background: #e8eaed; }
-
-    .section-title {
-      font-size: 0.875rem; font-weight: 600;
-      color: rgba(32,33,36,0.6); letter-spacing: 0.05em;
-      margin-bottom: 1rem; padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(218,220,224,0.3);
-    }
-
-    .skill-chip {
-      padding: 0.375rem 0.875rem;
-      background: #f1f3f4; border-radius: 9999px;
-      font-size: 0.875rem; color: #202124;
-      transition: background 0.15s;
-    }
-    .skill-chip:hover { background: #e8eaed; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-item { opacity: 0; animation: fadeUp 0.5s ease forwards; }
-    .hero-item:nth-child(1) { animation-delay: 0.05s; }
-    .hero-item:nth-child(2) { animation-delay: 0.12s; }
-    .hero-item:nth-child(3) { animation-delay: 0.19s; }
-    .hero-item:nth-child(4) { animation-delay: 0.26s; }
-    .hero-item:nth-child(5) { animation-delay: 0.33s; }
-
-    .section-card {
-      padding: 1rem 0; margin-bottom: 0.25rem;
-    }
-    .section-card + .section-card {
-      border-top: 1px solid #f1f3f4;
-    }
-    @media (min-width: 768px) { .section-card { padding: 1.25rem 0; } }
-
-    #scroll-crumb {
-      position: sticky; top: 0; z-index: 20;
-      margin: 0 -1.5rem 1.25rem;
-      padding: 0 1.5rem;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(218,220,224,0.45);
-      height: 0; overflow: hidden;
-      transition: height 0.2s ease;
-    }
-    #scroll-crumb.visible { height: 36px; }
-    #scroll-crumb-inner {
-      display: flex; align-items: center; height: 36px;
-    }
-    #scroll-crumb-text {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
-      text-transform: uppercase; color: #9aa0a6;
-    }
-    @media (min-width: 768px) {
-      #scroll-crumb { margin: 0 -2.5rem 1.5rem; padding: 0 2.5rem; }
-    }
-  </style>
+    @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+</style>
 </head>
 
 <body class="min-h-screen bg-white font-sans text-g-dark">
@@ -185,204 +129,19 @@
       (dict "id" "other-activities" "label" "Other"))))
   }}
 
-  {{/* ── Desktop Sidebar ── */}}
-  <aside class="hidden md:flex fixed inset-y-0 left-0 z-50 w-52 flex-col border-r border-g-border bg-white">
-    <div class="px-6 pt-8 pb-6">
-      <a href="#about" class="text-lg font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
-    </div>
-    <nav id="sidebar-nav" class="flex-1 px-3 space-y-0.5 overflow-y-auto">
-      {{ range $nav }}
-      {{ $pid := .id }}
-      <div class="nav-group">
-        <a href="#{{ .id }}"
-           class="sidebar-link{{ if not .children }} active{{ end }}"
-           data-section="{{ .id }}"
-           {{ if .children }}onclick="toggleNav(this)"{{ end }}>
-          <span>{{ .label }}</span>
-          {{ if .children }}
-          <svg class="chevron" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-          {{ end }}
-        </a>
-        {{ if .children }}
-        <div class="children-wrap">
-          {{ range .children }}
-          <a href="#{{ .id }}" class="sub-link" data-parent="{{ $pid }}">{{ .label }}</a>
-          {{ end }}
-        </div>
-        {{ end }}
-      </div>
-      {{ end }}
-    </nav>
-    <div class="px-6 py-5 border-t border-g-border text-[13px]">
-      {{ if eq $lang "ko" }}
-      <a href="{{ "" | relURL }}" class="font-medium text-g-gray hover:text-g-dark transition-colors">English</a>
-      {{ else }}
-      <a href="{{ "ko/" | relURL }}" class="font-medium text-g-gray hover:text-g-dark transition-colors">Korean</a>
-      {{ end }}
-    </div>
-  </aside>
-
-  {{/* ── Mobile Header ── */}}
-  <header id="mobile-header" class="md:hidden sticky top-0 z-50 bg-white border-b border-g-border transition-shadow duration-200">
-    <div class="max-w-5xl mx-auto px-6 h-[60px] flex items-center gap-2">
-      <button id="hamburger-btn" class="p-2 -ml-2 text-g-gray hover:text-g-dark transition-colors" aria-label="Menu">
-        <svg id="hamburger-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-      <a href="#about" class="text-[17px] font-semibold text-g-dark tracking-tight">{{ .Site.Title }}</a>
-    </div>
-  </header>
-
-  {{/* ── Mobile Menu Overlay ── */}}
-  <div id="mobile-menu" class="md:hidden fixed inset-0 z-40 hidden menu-overlay">
-    <div class="absolute inset-0 bg-black/30" onclick="closeMobileMenu()"></div>
-    <div class="absolute top-0 left-0 right-0 bg-white shadow-lg menu-panel max-h-[85vh] overflow-y-auto rounded-b-2xl">
-      <nav class="px-4 py-4 space-y-0.5">
-        {{ range $nav }}
-        <div>
-          <a href="#{{ .id }}"
-             class="mobile-link font-medium flex items-center justify-between"
-             onclick="toggleMobileNav(this); event.preventDefault();">
-            <span>{{ .label }}</span>
-            {{ if .children }}
-            <svg class="chevron text-g-gray" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
-            {{ end }}
-          </a>
-          {{ if .children }}
-          <div class="children-wrap pl-2">
-            {{ range .children }}
-            <a href="#{{ .id }}" class="mobile-sub" onclick="closeMobileMenu()">{{ .label }}</a>
-            {{ end }}
-          </div>
-          {{ end }}
-        </div>
-        {{ end }}
-        <div class="pt-3 mt-3 border-t border-g-border">
-          {{ if eq $lang "ko" }}
-          <a href="{{ "" | relURL }}" class="mobile-link text-g-gray">English</a>
-          {{ else }}
-          <a href="{{ "ko/" | relURL }}" class="mobile-link text-g-gray">Korean</a>
-          {{ end }}
-        </div>
+  <header class="masthead">
+    <div class="masthead-inner">
+      <a class="site-name" href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+      <nav class="site-nav" aria-label="{{ if eq $lang "ko" }}주 메뉴{{ else }}Main navigation{{ end }}">
+        {{ range $nav }}<a href="{{ $.Site.Home.RelPermalink }}#{{ .id }}">{{ .label }}</a>{{ end }}
+        {{ if eq $lang "ko" }}<a class="language-link" href="{{ "" | relURL }}">English</a>{{ else }}<a class="language-link" href="{{ "ko/" | relURL }}">한국어</a>{{ end }}
       </nav>
     </div>
+  </header>
+  <div class="academic-layout">
+    {{ partial "author-sidebar.html" . }}
+    <main id="main-content">{{ block "main" . }}{{ end }}</main>
   </div>
-
-  {{/* ── Main Content ── */}}
-  <main id="main-content" class="md:ml-52 min-h-screen">
-    <div class="max-w-4xl mx-auto px-6 md:px-10 py-6 md:py-8">
-      <div id="scroll-crumb" aria-hidden="true">
-        <div id="scroll-crumb-inner">
-          <span id="scroll-crumb-text"></span>
-        </div>
-      </div>
-      {{ block "main" . }}{{ end }}
-    </div>
-  </main>
-
-  <footer class="md:ml-52 border-t border-g-border">
-    <div class="max-w-4xl mx-auto px-6 md:px-10 py-5 text-center text-[13px] text-g-gray">
-      <span>{{ replace .Site.Copyright "{year}" (now.Format "2006") }}</span>
-    </div>
-  </footer>
-
-  <script>
-    (function() {
-
-      /* ── Sidebar scroll spy + section crumb ── */
-      var sidebarLinks = document.querySelectorAll('#sidebar-nav .sidebar-link[data-section]');
-      var crumb = document.getElementById('scroll-crumb');
-      var crumbText = document.getElementById('scroll-crumb-text');
-      var sections = [];
-      sidebarLinks.forEach(function(link) {
-        var id = link.getAttribute('data-section');
-        var el = document.getElementById(id);
-        if (el) sections.push({ el: el, link: link, id: id });
-      });
-
-      if (sections.length > 0) {
-        var observer = new IntersectionObserver(function(entries) {
-          var best = null;
-          entries.forEach(function(entry) {
-            if (entry.intersectionRatio > 0) {
-              if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
-            }
-          });
-          if (best) {
-            sidebarLinks.forEach(function(l) { l.classList.remove('active'); });
-            var active = document.querySelector('#sidebar-nav .sidebar-link[data-section="' + best.target.id + '"]');
-            if (active) {
-              active.classList.add('active');
-              var label = active.querySelector('span') ? active.querySelector('span').textContent : '';
-              if (best.target.id === 'about') {
-                crumb.classList.remove('visible');
-              } else {
-                crumbText.textContent = label;
-                crumb.classList.add('visible');
-              }
-            }
-          }
-        }, { threshold: [0.05, 0.2, 0.3, 0.4, 0.5] });
-        sections.forEach(function(s) { observer.observe(s.el); });
-      }
-
-      /* ── Mobile header shadow ── */
-      var hdr = document.getElementById('mobile-header');
-      window.addEventListener('scroll', function() {
-        hdr.classList.toggle('nav-shadow', window.scrollY > 0);
-      }, { passive: true });
-
-      /* ── Hamburger ── */
-      window.openMobileMenu = function() {
-        document.getElementById('mobile-menu').classList.remove('hidden');
-        document.getElementById('hamburger-icon').classList.add('hidden');
-        document.getElementById('close-icon').classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      };
-      window.closeMobileMenu = function() {
-        document.getElementById('mobile-menu').classList.add('hidden');
-        document.getElementById('hamburger-icon').classList.remove('hidden');
-        document.getElementById('close-icon').classList.add('hidden');
-        document.body.style.overflow = '';
-      };
-      document.getElementById('hamburger-btn').addEventListener('click', function() {
-        var menu = document.getElementById('mobile-menu');
-        if (menu.classList.contains('hidden')) openMobileMenu();
-        else closeMobileMenu();
-      });
-
-      /* ── Accordion toggle (sidebar) ── */
-      window.toggleNav = function(el) {
-        var wrap = el.nextElementSibling;
-        if (!wrap || !wrap.classList.contains('children-wrap')) return;
-        var chevron = el.querySelector('.chevron');
-        wrap.classList.toggle('open');
-        if (chevron) chevron.classList.toggle('open');
-      };
-
-      /* ── Accordion toggle (mobile) ── */
-      window.toggleMobileNav = function(el) {
-        var wrap = el.nextElementSibling;
-        if (!wrap || !wrap.classList.contains('children-wrap')) return;
-        var chevron = el.querySelector('.chevron');
-        wrap.classList.toggle('open');
-        if (chevron) chevron.classList.toggle('open');
-        /* also scroll to section */
-        var href = el.getAttribute('href');
-        if (href) {
-          setTimeout(function() {
-            document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
-          }, 150);
-        }
-      };
-
-      /* ── Close mobile menu on sub-link click ── */
-      document.querySelectorAll('#mobile-menu .mobile-sub, #mobile-menu .mobile-link:not([onclick])').forEach(function(link) {
-        link.addEventListener('click', closeMobileMenu);
-      });
-
-    })();
-  </script>
-
+  <footer class="site-footer"><div>{{ replace .Site.Copyright "{year}" (now.Format "2006") }}</div></footer>
 </body>
 </html>
